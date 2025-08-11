@@ -1,7 +1,5 @@
 from github_graphql import fetch_repositories
 
-# Dependencias: requests, numpy, matplotlib e pandas
-
 def ratio_issues_closed(total_issues, closed_issues):
     return closed_issues / total_issues if total_issues > 0 else 0
 
@@ -25,7 +23,7 @@ def print_results(repositories):
 if __name__ == '__main__':
 
     try:
-        repositories = fetch_repositories(10)  # Fetch 10 repositories
+        repositories = fetch_repositories(100)
         print_results(repositories)
     except Exception as e:
         print(f'Erro: {e}')
