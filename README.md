@@ -1,2 +1,2 @@
-# Lab1---Experimenta-o-de-Sofrware
+# Lab1 - Experimentação de Software
 Trabalho 1 - Laboratório de Experimentação de Software
