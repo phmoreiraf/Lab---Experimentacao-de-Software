@@ -1,29 +1,16 @@
 from github_graphql import fetch_repositories
 
-def ratio_issues_closed(total_issues, closed_issues):
-    return closed_issues / total_issues if total_issues > 0 else 0
-
-def print_results(repositories):
-    for repo in repositories:
-        total_issues = repo['issues']['totalCount']
-        closed_issues = repo['closedIssues']['totalCount']
-        print(f"Repository: {repo['nameWithOwner']}")
-        print(f"  Created at: {repo['createdAt']}")
-        print(f"  Last updated: {repo['updatedAt']}")
-        print(f"  Primary language: {repo['primaryLanguage']['name'] if repo['primaryLanguage'] else 'None'}")
-        print(f"  Merged Pull Requests: {repo['pullRequests']['totalCount']}")
-        print(f"  Releases: {repo['releases']['totalCount']}")
-        print(f"  Total Issues: {total_issues}")
-        print(f"  Closed Issues: {closed_issues}")
-        print(f"  Ratio of closed issues: {(ratio_issues_closed(total_issues, closed_issues) * 100):.2f}%")
-        print("-" * 50)
-    print("Total repositories fetched:", len(repositories))
-
-# Main
 if __name__ == '__main__':
-
     try:
-        repositories = fetch_repositories(100)
-        print_results(repositories)
+        escolha = input("Quantos repositórios deseja buscar? (100 ou 1000): ").strip()
+        if escolha not in ["100", "1000"]:
+            print("Escolha inválida. Digite 100 ou 1000.")
+            exit()
+
+        quantidade = int(escolha)
+        print(f"Buscando dados dos {quantidade} repositórios mais populares...")
+        fetch_repositories(quantidade)
+        print(f"Dados salvos em ../data/resultados{quantidade}Repos.csv")
+
     except Exception as e:
         print(f'Erro: {e}')
