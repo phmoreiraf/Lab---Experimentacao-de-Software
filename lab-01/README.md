@@ -32,12 +32,7 @@ Os dados dos repositórios são coletados por meio da API GraphQL do GitHub. Par
 
 Após a coleta das informações inciais, é feito uma sumarização através de valores medianos.
 
-## Dependências
-
-- **requests** - Para fazer requisições HTTP para a API do GitHub
-- **gql** - Para interagir com a API GraphQL do GitHub
-
-## 🛠️ Como configurar o ambiente
+## Como rodar o projeto
 
 ### 1. Gerar um Token de Acesso no GitHub
 
@@ -46,15 +41,14 @@ Acesse as configurações do seu GitHub e gere um Personal Access Token com as p
 ```bash
 ### 2. Baixar o projeto
 
-```bash
 git clone
-cd nome-do-repositorio/code
+cd https://github.com/phmoreiraf/Lab---Experimentacao-de-Software/lab-01/code
 ```
 
 ### 3. Criar o ambiente virtual
 
 ```bash
-python3 -m venv .venv
+python -m venv .venv
 ```
 
 ### 4. Ativar o ambiente virtual
@@ -66,30 +60,21 @@ python3 -m venv .venv
 ### 5. Instalar dependências
 
 ```bash
-pip install requests gql
+pip install -r requirements.txt
 ```
 
 ### 6. Configurar o token no código
 
-Configure seu token de acesso do GitHub no arquivo de configuração do projeto.
+1. Configure seu token de acesso do GitHub.
+2. Crie um arquivo .env na pasta ```code```
+3. Copie seu token do github no arquivo criado.
 
 ### 7. Executar o script
 
 ```bash
-python consulta_repositorios.py
+python main.py
 ```
 
 ### 8. Verificar os dados salvos
 
 Os resultados serão salvos em `repositorios.csv` para análise posterior.
-
-## 📋 Funcionalidades
-
-- Consulta informações de repositórios via API REST
-- Integração com GraphQL do GitHub
-- Exportação de dados em formato CSV
-- Ambiente virtual isolado para dependências
-
-## 🚀 Uso
-
-Após seguir os passos de configuração, o script irá consultar os repositórios especificados e salvar as informações relevantes em um arquivo CSV para análise.
