@@ -40,7 +40,7 @@ headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}
 
 def fetch_repositories(total_repos=100):
     results = []
-    page_size = min(100, total_repos)
+    page_size = 25
     after_cursor = None
 
     while len(results) < total_repos:
@@ -64,11 +64,11 @@ def fetch_repositories(total_repos=100):
                 else:
                     print(f"[AVISO] Falha {response.status_code}, tentativa {tentativa+1}/3")
                     print(f"[DEBUG] Conteúdo da resposta: {response.text}")
-                    time.sleep(5)
+                    time.sleep(3)
 
             except requests.exceptions.RequestException as e:
                 print(f"[ERRO] Problema de conexão: {e}, tentativa {tentativa+1}/3")
-                time.sleep(5)
+                time.sleep(3)
         else:
             print(f"[ERRO] Query falhou após 3 tentativas. Última resposta:")
             print(f"Status: {response.status_code}")
@@ -96,7 +96,6 @@ def fetch_repositories(total_repos=100):
 
         after_cursor = data["pageInfo"]["endCursor"]
         remaining = total_repos - len(results)
-        page_size = min(100, remaining)
 
         time.sleep(1)  # evita sobrecarregar a API
 
