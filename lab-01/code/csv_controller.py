@@ -6,7 +6,7 @@ data_dir = os.path.join(os.path.dirname(__file__), "../data")
 def save_to_csv(repositories):
     # Salva no diretório ../data
     os.makedirs(data_dir, exist_ok=True)
-    file_path = os.path.join(data_dir, "resultados100Repos.csv")
+    file_path = os.path.join(data_dir, f"resultados{len(repositories)}Repos.csv")
 
     with open(file_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
