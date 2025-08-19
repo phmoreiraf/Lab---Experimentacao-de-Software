@@ -39,7 +39,7 @@ headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}
 
 def fetch_repositories(total_repos=100):
     results = []
-    page_size = 25
+    page_size = 20
     after_cursor = None
 
     while len(results) < total_repos:
