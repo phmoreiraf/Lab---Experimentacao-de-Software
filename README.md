@@ -4,7 +4,7 @@
 
 - Jhonata Silveira Dias
 
-- Lucca Oliveira Vasconselos de Faria
+- Lucca Oliveira Vasconcelos de Faria
 
 - Pedro Henrique Moreira Caixeta Ferreira
 
