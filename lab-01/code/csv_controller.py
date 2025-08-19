@@ -1,9 +1,10 @@
 import csv
 import os
 
+data_dir = os.path.join(os.path.dirname(__file__), "../data")
+
 def save_to_csv(repositories):
     # Salva no diretório ../data
-    data_dir = os.path.join(os.path.dirname(__file__), "../data")
     os.makedirs(data_dir, exist_ok=True)
     file_path = os.path.join(data_dir, "resultados100Repos.csv")
 
@@ -25,3 +26,8 @@ def save_to_csv(repositories):
                 repo['issues']['totalCount'],
                 repo['closedIssues']['totalCount']
             ])
+
+def list_saved_results():
+    files = os.listdir(data_dir)
+    csv_files = [f for f in files if f.endswith(".csv")]
+    return csv_files
