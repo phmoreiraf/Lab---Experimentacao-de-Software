@@ -33,19 +33,19 @@ def analisar_repositorios(data_path: str):
 
 
     print("\n===== RQ02 - Pull Requests Aceitos =====")
-    print("Mediana:", df["mergedPRs"].median())
-    print("Media:", df["mergedPRs"].mean())
-    print("Moda:", df["mergedPRs"].mode()[0])
+    print("Mediana:", round(df["mergedPRs"].median(), 2))
+    print("Media:", round(df["mergedPRs"].mean(), 2))
+    print("Moda:", round(df["mergedPRs"].mode()[0], 2))
 
     print("\n===== RQ03 - Releases =====")
-    print("Mediana:", df["releases"].median())
-    print("Media:", df["releases"].mean())
-    print("Moda:", df["releases"].mode()[0])
+    print("Mediana:", round(df["releases"].median(), 2))
+    print("Media:", round(df["releases"].mean(), 2))
+    print("Moda:", round(df["releases"].mode()[0], 2))
 
     print("\n===== RQ04 - Dias desde última atualização =====")
-    print("Mediana:", df["dias_desde_update"].median())
-    print("Media:", df["dias_desde_update"].mean())
-    print("Moda:", df["dias_desde_update"].mode()[0])
+    print("Mediana:", round(df["dias_desde_update"].median(), 2))
+    print("Media:", round(df["dias_desde_update"].mean(), 2))
+    print("Moda:", round(df["dias_desde_update"].mode()[0], 2))
 
     print("\n===== RQ05 - Linguagens mais usadas =====")
     print(df["primaryLanguage"].value_counts())

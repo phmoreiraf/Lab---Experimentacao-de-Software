@@ -6,17 +6,29 @@ Este projeto consiste na análise das principais características de repositóri
 
 As métricas obtidas buscam responder seis questões de pesquisa principais e uma questão bônus, sendo elas:
 
-### Questões de Pesquisa (QP)
+### Questões de Pesquisa (RQ)
 
-- **QP 01:** Sistemas populares são maduros/antigos?
-- **QP 02:** Sistemas populares recebem muita contribuição externa?
-- **QP 03:** Sistemas populares lançam releases com frequência?
-- **QP 04:** Sistemas populares são atualizados com frequência?
-- **QP 05:** Sistemas populares são escritos nas linguagens mais populares?
-- **QP 06:** Sistemas populares possuem um alto percentual de issues fechadas?
-- **QP 07:** Sistemas escritos em linguagens mais populares recebem mais contribuição *(questão bônus)*
+- **RQ 01:** Sistemas populares são maduros/antigos?
+- **RQ 02:** Sistemas populares recebem muita contribuição externa?
+- **RQ 03:** Sistemas populares lançam releases com frequência?
+- **RQ 04:** Sistemas populares são atualizados com frequência?
+- **RQ 05:** Sistemas populares são escritos nas linguagens mais populares?
+- **RQ 06:** Sistemas populares possuem um alto percentual de issues fechadas?
+- **RQ 07:** Sistemas escritos em linguagens mais populares recebem mais contribuição *(questão bônus)*
 
 Com essas respostas, será possível definir características presentes em projetos populares, aumentando o conhecimento sobre o que é necessário para que um repositório tenha sucesso atualmente.
+
+### Hipoteses Informais
+
+Tendo em vista as questões de pesquisa apresentadas, foram formuladas algumas hipoteses informais pelo grupo deste projeto. Essas hipoteses trazem o que se espera dos sistemas mais populares partindo do ponto de vista do senso comum. Sendo elas:
+
+- **H01 (RQ01):** Sistemas populares são relativamente antigos, com idade média entre 7–8 anos.
+- **H02 (RQ02):** Sistemas populares recebem bastante contribuição externa, com muitos pull requests e colaboradores de fora da equipe principal.
+- **H03 (RQ03):** Sistemas populares lançam novas versões com frequência.
+- **H04 (RQ04):** Sistemas populares possuem atividade constante, com commits regulares e atualizações frequentes no repositório.
+- **H05 (RQ05):** Sistemas populares tendem a ser escritos principalmente em linguagens amplamente utilizadas, especialmente JavaScript, Python e Java.
+- **H06 (RQ06):** Sistemas populares possuem um alto percentual de issues resolvidas/fechadas, refletindo boa manutenção.
+- **H07 (RQ07):** Projetos escritos em linguagens populares atraem mais contribuições externas do que os escritos em linguagens menos utilizadas.
 
 ## Metodologia
 
@@ -38,9 +50,9 @@ Após a coleta das informações inciais, é feito uma sumarização através de
 
 Acesse as configurações do seu GitHub e gere um Personal Access Token com as permissões necessárias.
 
-```bash
 ### 2. Baixar o projeto
 
+```bash
 git clone
 cd https://github.com/phmoreiraf/Lab---Experimentacao-de-Software/lab-01/code
 ```
@@ -75,6 +87,12 @@ pip install -r requirements.txt
 python main.py
 ```
 
-### 8. Verificar os dados salvos
+### 8. Navegue pelo menu
 
-Os resultados serão salvos em `repositorios.csv` para análise posterior.
+O menu da aplicação tem três opções:
+
+1. Buscar dados dos repositórios mais populares -> Busca os dados brutos do github e os salva na pasta ```data``` em um arquivo csv (já terá dados disponíveis, então use essa opção se quiser dados mais recentes).
+
+2. Analisar dados -> Verifica quais dados estão na pasta ```data``` e apresenta as opções para o usuário. Ao escolher um conjunto de dados é feito uma analise estatistica simples das médias, moda, média, mediana que são mostradas ao usuário e gerado gráficos na pasta ```charts```.
+
+3. Sair -> Sai do programa.
