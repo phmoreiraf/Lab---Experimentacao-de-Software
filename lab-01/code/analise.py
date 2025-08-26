@@ -74,9 +74,10 @@ def analisar_repositorios(data_path: str):
     plt.close()
 
     # Top linguagens
-    df["primaryLanguage"].value_counts().head(10).plot(kind="bar")
+    df["primaryLanguage"].value_counts().head(10).plot(kind="bar", figsize=(8,8))
     plt.title("Top 10 Linguagens Mais Usadas")
     plt.ylabel("Quantidade")
+    plt.xlabel("Linguagem")
     plt.savefig(os.path.join(charts_dir, f"linguagens_{file_stem}.png"))
     plt.close()
 
