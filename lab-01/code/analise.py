@@ -11,6 +11,12 @@ def analisar_repositorios(data_path: str):
     # Criação da pasta charts
     charts_dir = os.path.join(os.path.dirname(__file__), "../charts")
     os.makedirs(charts_dir, exist_ok=True)
+    file_stem = os.path.splitext(os.path.basename(data_path))[0]
+    metrics_path = os.path.join(charts_dir, f"metrics{file_stem}.txt")
+    
+    if(os.path.exists(metrics_path)):
+        with open(metrics_path, "w") as f:
+            f.write("")
 
     df = pd.read_csv(data_path)
 
@@ -26,40 +32,39 @@ def analisar_repositorios(data_path: str):
     # =======================
     # Estatísticas RQ01 a RQ06
     # =======================
-    print("\n===== RQ01 - Idade dos repositórios (anos) =====")
-    print("Mediana:", round(df["idade_anos"].median(), 2))
-    print("Media:", round(df["idade_anos"].mean(), 2))
-    print("Moda:", round(df["idade_anos"].mode()[0], 2))
+    print_and_write(metrics_path, "===== RQ01 - Idade dos repositorios (anos) =====\n")
+    print_and_write(metrics_path, "Mediana: {}\n".format(round(df["idade_anos"].median(), 2)))
+    print_and_write(metrics_path, "Media: {}\n".format(round(df["idade_anos"].mean(), 2)))
+    print_and_write(metrics_path, "Moda: {}\n".format(round(df["idade_anos"].mode()[0], 2)))
 
 
-    print("\n===== RQ02 - Pull Requests Aceitos =====")
-    print("Mediana:", round(df["mergedPRs"].median(), 2))
-    print("Media:", round(df["mergedPRs"].mean(), 2))
-    print("Moda:", round(df["mergedPRs"].mode()[0], 2))
+    print_and_write(metrics_path, "===== RQ02 - Pull Requests Aceitos =====\n")
+    print_and_write(metrics_path, "Mediana: {}\n".format(round(df["mergedPRs"].median(), 2)))
+    print_and_write(metrics_path, "Media: {}\n".format(round(df["mergedPRs"].mean(), 2)))
+    print_and_write(metrics_path, "Moda: {}\n".format(round(df["mergedPRs"].mode()[0], 2)))
 
-    print("\n===== RQ03 - Releases =====")
-    print("Mediana:", round(df["releases"].median(), 2))
-    print("Media:", round(df["releases"].mean(), 2))
-    print("Moda:", round(df["releases"].mode()[0], 2))
+    print_and_write(metrics_path, "===== RQ03 - Releases =====\n")
+    print_and_write(metrics_path, "Mediana: {}\n".format(round(df["releases"].median(), 2)))
+    print_and_write(metrics_path, "Media: {}\n".format(round(df["releases"].mean(), 2)))
+    print_and_write(metrics_path, "Moda: {}\n".format(round(df["releases"].mode()[0], 2)))
 
-    print("\n===== RQ04 - Dias desde última atualização =====")
-    print("Mediana:", round(df["dias_desde_update"].median(), 2))
-    print("Media:", round(df["dias_desde_update"].mean(), 2))
-    print("Moda:", round(df["dias_desde_update"].mode()[0], 2))
+    print_and_write(metrics_path, "===== RQ04 - Dias desde ultima atualizacao =====\n")
+    print_and_write(metrics_path, "Mediana: {}\n".format(round(df["dias_desde_update"].median(), 2)))
+    print_and_write(metrics_path, "Media: {}\n".format(round(df["dias_desde_update"].mean(), 2)))
+    print_and_write(metrics_path, "Moda: {}\n".format(round(df["dias_desde_update"].mode()[0], 2)))
 
-    print("\n===== RQ05 - Linguagens mais usadas =====")
-    print(df["primaryLanguage"].value_counts())
+    print_and_write(metrics_path, "===== RQ05 - Linguagens mais usadas =====\n")
+    print_and_write(metrics_path, "{}\n".format(df["primaryLanguage"].value_counts()))
 
-    print("\n===== RQ06 - Percentual de Issues Fechadas =====")
-    print("Mediana:", round(df["ratio_closed_issues"].median() * 100, 2), "%")
-    print("Media:", round(df["ratio_closed_issues"].mean() * 100, 2), "%")
-    print("Moda:", round(df["ratio_closed_issues"].mode()[0] * 100, 2), "%")
+    print_and_write(metrics_path, "===== RQ06 - Percentual de Issues Fechadas =====\n")
+    print_and_write(metrics_path, "Mediana: {}\n".format(round(df["ratio_closed_issues"].median() * 100, 2)))
+    print_and_write(metrics_path, "Media: {}\n".format(round(df["ratio_closed_issues"].mean() * 100, 2)))
+    print_and_write(metrics_path, "Moda: {}\n".format(round(df["ratio_closed_issues"].mode()[0] * 100, 2)))
 
     # =======================
     # Gráficos principais
     # =======================
     # Idade dos repositórios
-    file_stem = os.path.splitext(os.path.basename(data_path))[0]
 
     df["idade_anos"].hist(bins=30)
     plt.title("Distribuição da Idade dos Repositórios (anos)")
@@ -88,21 +93,27 @@ def analisar_repositorios(data_path: str):
     # =======================
     # Bônus RQ07 - Por linguagem
     # =======================
-    print("\n===== RQ07 - Métricas por Linguagem =====")
+    print_and_write(metrics_path, "\n===== RQ07 - Metricas por Linguagem =====\n")
     linguagens_populares = df["primaryLanguage"].value_counts().head(5).index.tolist()
-    print(f"Linguagens mais populares: {linguagens_populares}")
+    print_and_write(metrics_path, "Linguagens mais populares: {}\n".format(linguagens_populares))
 
     df_populares = df[df["primaryLanguage"].isin(linguagens_populares)]
     df_outras = df[~df["primaryLanguage"].isin(linguagens_populares)]
 
-    print("\n--- Pull Requests Aceitos ---")
-    print("Populares:", df_populares["mergedPRs"].median())
-    print("Outras:", df_outras["mergedPRs"].median())
+    print_and_write(metrics_path, "\n--- Pull Requests Aceitos ---\n")
+    print_and_write(metrics_path, "Populares: {}\n".format(df_populares["mergedPRs"].median()))
+    print_and_write(metrics_path, "Outras: {}\n".format(df_outras["mergedPRs"].median()))
 
-    print("\n--- Releases ---")
-    print("Populares:", df_populares["releases"].median())
-    print("Outras:", df_outras["releases"].median())
+    print_and_write(metrics_path, "\n--- Releases ---\n")
+    print_and_write(metrics_path, "Populares: {}\n".format(df_populares["releases"].median()))
+    print_and_write(metrics_path, "Outras: {}\n".format(df_outras["releases"].median()))
 
-    print("\n--- Dias desde última atualização ---")
-    print("Populares:", df_populares["dias_desde_update"].median())
-    print("Outras:", df_outras["dias_desde_update"].median())
+    print_and_write(metrics_path, "\n--- Dias desde ultima atualizacao ---\n")
+    print_and_write(metrics_path, "Populares: {}\n".format(df_populares["dias_desde_update"].median()))
+    print_and_write(metrics_path, "Outras: {}\n".format(df_outras["dias_desde_update"].median()))
+
+
+def print_and_write(file_path, content):
+    with open(file_path, "a") as f:
+        f.write(content)
+    print(content)
