@@ -2,48 +2,6 @@
 
 Este projeto consiste na análise das principais características de repositórios populares open-source. 
 
-## Objetivos
-
-As métricas obtidas buscam responder seis questões de pesquisa principais e uma questão bônus, sendo elas:
-
-### Questões de Pesquisa (RQ)
-
-- **RQ 01:** Sistemas populares são maduros/antigos?
-- **RQ 02:** Sistemas populares recebem muita contribuição externa?
-- **RQ 03:** Sistemas populares lançam releases com frequência?
-- **RQ 04:** Sistemas populares são atualizados com frequência?
-- **RQ 05:** Sistemas populares são escritos nas linguagens mais populares?
-- **RQ 06:** Sistemas populares possuem um alto percentual de issues fechadas?
-- **RQ 07:** Sistemas escritos em linguagens mais populares recebem mais contribuição *(questão bônus)*
-
-Com essas respostas, será possível definir características presentes em projetos populares, aumentando o conhecimento sobre o que é necessário para que um repositório tenha sucesso atualmente.
-
-### Hipoteses Informais
-
-Tendo em vista as questões de pesquisa apresentadas, foram formuladas algumas hipoteses informais pelo grupo deste projeto. Essas hipoteses trazem o que se espera dos sistemas mais populares partindo do ponto de vista do senso comum. Sendo elas:
-
-- **H01 (RQ01):** Sistemas populares são relativamente antigos, com idade média entre 7–8 anos.
-- **H02 (RQ02):** Sistemas populares recebem bastante contribuição externa, com muitos pull requests e colaboradores de fora da equipe principal.
-- **H03 (RQ03):** Sistemas populares lançam novas versões com frequência.
-- **H04 (RQ04):** Sistemas populares possuem atividade constante, com commits regulares e atualizações frequentes no repositório.
-- **H05 (RQ05):** Sistemas populares tendem a ser escritos principalmente em linguagens amplamente utilizadas, especialmente JavaScript, Python e Java.
-- **H06 (RQ06):** Sistemas populares possuem um alto percentual de issues resolvidas/fechadas, refletindo boa manutenção.
-- **H07 (RQ07):** Projetos escritos em linguagens populares atraem mais contribuições externas do que os escritos em linguagens menos utilizadas.
-
-## Metodologia
-
-Os dados dos repositórios são coletados por meio da API GraphQL do GitHub. Para isso, o projeto é desenvolvido em Python, aproveitando o extenso suporte da linguagem para análise de dados. As ferramentas utilizadas são:
-
-### Ferramentas
-
-- API GraphQL do GitHub - API que providencia dados acerca dos repositórios públicos do github por meio do GraphQL.
-- Python 3.12 - Linguagem de programação.
-- Requestes - Biblioteca do python que facilita o envio de requisições HTTP
-- OS - Biblioteca padrão do python que disponibilita funções para operações de nível de sistema operacional
-- Python-dotenv - Biblioteca do python que possibilita o uso de arquivos .env para variavéis de ambiente
-
-Após a coleta das informações inciais, é feito uma sumarização através de valores medianos.
-
 ## Como rodar o projeto
 
 ### 1. Gerar um Token de Acesso no GitHub
@@ -96,6 +54,48 @@ O menu da aplicação tem três opções:
 2. Analisar dados -> Verifica quais dados estão na pasta ```data``` e apresenta as opções para o usuário. Ao escolher um conjunto de dados é feito uma analise estatistica simples das tendência central , moda, média, mediana que são mostradas ao usuário e gerado gráficos na pasta ```charts```.
 
 3. Sair -> Sai do programa.
+
+## Objetivos
+
+As métricas obtidas buscam responder seis questões de pesquisa principais e uma questão bônus, sendo elas:
+
+### Questões de Pesquisa (RQ)
+
+- **RQ 01:** Sistemas populares são maduros/antigos?
+- **RQ 02:** Sistemas populares recebem muita contribuição externa?
+- **RQ 03:** Sistemas populares lançam releases com frequência?
+- **RQ 04:** Sistemas populares são atualizados com frequência?
+- **RQ 05:** Sistemas populares são escritos nas linguagens mais populares?
+- **RQ 06:** Sistemas populares possuem um alto percentual de issues fechadas?
+- **RQ 07:** Sistemas escritos em linguagens mais populares recebem mais contribuição *(questão bônus)*
+
+Com essas respostas, será possível definir características presentes em projetos populares, aumentando o conhecimento sobre o que é necessário para que um repositório tenha sucesso atualmente.
+
+### Hipoteses Informais
+
+Tendo em vista as questões de pesquisa apresentadas, foram formuladas algumas hipoteses informais pelo grupo deste projeto. Essas hipoteses trazem o que se espera dos sistemas mais populares partindo do ponto de vista do senso comum. Sendo elas:
+
+- **H01 (RQ01):** Sistemas populares são relativamente antigos, com idade média entre 7–8 anos.
+- **H02 (RQ02):** Sistemas populares recebem bastante contribuição externa, com muitos pull requests e colaboradores de fora da equipe principal.
+- **H03 (RQ03):** Sistemas populares lançam novas versões com frequência.
+- **H04 (RQ04):** Sistemas populares possuem atividade constante, com commits regulares e atualizações frequentes no repositório.
+- **H05 (RQ05):** Sistemas populares tendem a ser escritos principalmente em linguagens amplamente utilizadas, especialmente JavaScript, Python e Java.
+- **H06 (RQ06):** Sistemas populares possuem um alto percentual de issues resolvidas/fechadas, refletindo boa manutenção.
+- **H07 (RQ07):** Projetos escritos em linguagens populares atraem mais contribuições externas do que os escritos em linguagens menos utilizadas.
+
+## Metodologia
+
+Os dados dos repositórios são coletados por meio da API GraphQL do GitHub. Para isso, o projeto é desenvolvido em Python, aproveitando o extenso suporte da linguagem para análise de dados. As ferramentas utilizadas são:
+
+### Ferramentas
+
+- API GraphQL do GitHub - API que providencia dados acerca dos repositórios públicos do github por meio do GraphQL.
+- Python 3.12 - Linguagem de programação.
+- Requestes - Biblioteca do python que facilita o envio de requisições HTTP
+- OS - Biblioteca padrão do python que disponibilita funções para operações de nível de sistema operacional
+- Python-dotenv - Biblioteca do python que possibilita o uso de arquivos .env para variavéis de ambiente
+
+Após a coleta das informações inciais, é feito uma sumarização através de valores medianos.
 
 ## Resultados
 
