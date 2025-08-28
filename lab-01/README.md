@@ -53,7 +53,7 @@ Acesse as configurações do seu GitHub e gere um Personal Access Token com as p
 ### 2. Baixar o projeto
 
 ```bash
-git clone
+git clone https://github.com/phmoreiraf/Lab---Experimentacao-de-Software.git
 cd https://github.com/phmoreiraf/Lab---Experimentacao-de-Software/lab-01/code
 ```
 
@@ -93,6 +93,104 @@ O menu da aplicação tem três opções:
 
 1. Buscar dados dos repositórios mais populares -> Busca os dados brutos do github e os salva na pasta ```data``` em um arquivo csv (já terá dados disponíveis, então use essa opção se quiser dados mais recentes).
 
-2. Analisar dados -> Verifica quais dados estão na pasta ```data``` e apresenta as opções para o usuário. Ao escolher um conjunto de dados é feito uma analise estatistica simples das médias, moda, média, mediana que são mostradas ao usuário e gerado gráficos na pasta ```charts```.
+2. Analisar dados -> Verifica quais dados estão na pasta ```data``` e apresenta as opções para o usuário. Ao escolher um conjunto de dados é feito uma analise estatistica simples das tendência central , moda, média, mediana que são mostradas ao usuário e gerado gráficos na pasta ```charts```.
 
 3. Sair -> Sai do programa.
+
+## Resultados
+
+### Métricas coletadas para cada RQ:
+
+#### RQ01 - Idade dos repositorios (anos)
+- Mediana: 8.37
+- Média: 8.09
+- Moda: 12.15
+
+#### RQ02 - Pull Requests Aceitos
+- Mediana: 702.0
+- Média: 3587.87
+- Moda: 1
+
+#### RQ03 - Releases
+- Mediana: 35.0
+- Média: 109.34
+- Moda: 0
+
+#### RQ04 - Dias desde ultima atualizacao 
+- Mediana: 7.0
+- Média: 7.01
+- Moda: 7
+
+#### RQ05 - Linguagens mais usadas 
+
+| Linguagem | Numero de Repositorios |
+| ------------- | ------------- |
+|Python              |189|
+|TypeScript          |156|
+|JavaScript          |129|
+|Go                  | 73|
+|Java                | 50|
+|C++                 | 47|
+|Rust                | 45|
+|C                   | 25|
+|Jupyter Notebook    | 22|
+|Shell               | 19|
+|HTML                | 19|
+|Ruby                | 12|
+|C#                  | 12|
+|Kotlin              | 11|
+|Swift               |  9|
+|CSS                 |  8|
+|PHP                 |  7|
+|Vue                 |  7|
+|Markdown            |  5|
+|Dart                |  5|
+|MDX                 |  5|
+|Clojure             |  4|
+|Vim Script          |  4|
+|Zig                 |  3|
+|Dockerfile          |  3|
+|Assembly            |  2|
+|Batchfile           |  2|
+|TeX                 |  2|
+|Lua                 |  2|
+|Scala               |  2|
+|Makefile            |  2|
+|Roff                |  2|
+|Haskell             |  2|
+|Svelte              |  2|
+|Blade               |  1|
+|Nunjucks            |  1|
+|Julia               |  1|
+|PowerShell          |  1|
+|V                   |  1|
+|LLVM                |  1|
+|Elixir              |  1|
+|Objective-C         |  1|
+|SCSS                |  1|
+
+#### RQ06 - Percentual de Issues Fechadas -
+- Mediana: 86.56
+- Média: 79.95
+- Moda: 100.0
+
+#### RQ07 - Metricas por Linguagem 
+**Linguagens mais populares:**
+- Python 
+- TypeScript
+- JavaScript
+- Go
+- Java
+
+**Pull Requests Aceitos:** 
+- Populares: 927.0
+- Outras: 415.0
+
+**Releases:** 
+- Populares: 62.0
+- Outras: 3.0
+
+**Dias desde ultima atualização:** 
+- Populares: 7.0
+- Outras: 7.0
+
