@@ -1,7 +1,7 @@
 ===== RQ01 - Idade dos repositorios (anos) =====
-Mediana: 8.37
-Media: 8.09
-Moda: 12.15
+Mediana: 8.38
+Media: 8.1
+Moda: 9.0
 ===== RQ02 - Pull Requests Aceitos =====
 Mediana: 702.0
 Media: 3587.87

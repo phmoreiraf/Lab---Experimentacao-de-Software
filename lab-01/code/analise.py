@@ -26,6 +26,7 @@ def analisar_repositorios(data_path: str):
 
     # Métricas adicionais
     df["idade_anos"] = (datetime.now() - df["createdAt"]).dt.days / 365
+    df["idade_anos_round"] = df["idade_anos"].round(0)
     df["dias_desde_update"] = (datetime.now() - df["updatedAt"]).dt.days
     df["ratio_closed_issues"] = df["closedIssues"] / df["totalIssues"].replace(0, pd.NA)
 
@@ -35,7 +36,7 @@ def analisar_repositorios(data_path: str):
     print_and_write(metrics_path, "===== RQ01 - Idade dos repositorios (anos) =====\n")
     print_and_write(metrics_path, "Mediana: {}\n".format(round(df["idade_anos"].median(), 2)))
     print_and_write(metrics_path, "Media: {}\n".format(round(df["idade_anos"].mean(), 2)))
-    print_and_write(metrics_path, "Moda: {}\n".format(round(df["idade_anos"].mode()[0], 2)))
+    print_and_write(metrics_path, "Moda: {}\n".format(round(df["idade_anos_round"].mode()[0], 2)))
 
 
     print_and_write(metrics_path, "===== RQ02 - Pull Requests Aceitos =====\n")
@@ -66,7 +67,7 @@ def analisar_repositorios(data_path: str):
     # =======================
     # Idade dos repositórios
 
-    df["idade_anos"].hist(bins=30)
+    df["idade_anos"].hist(bins=15)
     plt.title("Distribuição da Idade dos Repositórios (anos)")
     plt.xlabel("Idade (anos)")
     plt.ylabel("Quantidade")
@@ -75,14 +76,14 @@ def analisar_repositorios(data_path: str):
 
     # Top linguagens
     df["primaryLanguage"].value_counts().head(10).plot(kind="bar", figsize=(8,8))
-    plt.title("Top 10 Linguagens Mais Usadas")
+    plt.title("Top 10 Linguagens Mais Populares")
     plt.ylabel("Quantidade")
     plt.xlabel("Linguagem")
     plt.savefig(os.path.join(charts_dir, f"linguagens_{file_stem}.png"))
     plt.close()
 
     # Percentual de issues fechadas
-    df["ratio_closed_issues"].dropna().hist(bins=30)
+    df["ratio_closed_issues"].dropna().hist(bins=15)
     plt.title("Distribuição da Razão de Issues Fechadas")
     plt.xlabel("Proporção")
     plt.ylabel("Quantidade")
