@@ -62,7 +62,7 @@ As métricas obtidas buscam responder seis questões de pesquisa principais e um
 ### Questões de Pesquisa (RQ)
 
 - **RQ 01:** Sistemas populares são maduros/antigos?
-- **RQ 02:** Sistemas populares recebem muita contribuição externa?
+- **RQ 02:** Sistemas populares recebem muita contribuição?
 - **RQ 03:** Sistemas populares lançam releases com frequência?
 - **RQ 04:** Sistemas populares são atualizados com frequência?
 - **RQ 05:** Sistemas populares são escritos nas linguagens mais populares?
@@ -71,12 +71,12 @@ As métricas obtidas buscam responder seis questões de pesquisa principais e um
 
 Com essas respostas, será possível definir características presentes em projetos populares, aumentando o conhecimento sobre o que é necessário para que um repositório tenha sucesso atualmente.
 
-### Hipoteses Informais
+### Hipóteses Informais
 
-Tendo em vista as questões de pesquisa apresentadas, foram formuladas algumas hipoteses informais pelo grupo deste projeto. Essas hipoteses trazem o que se espera dos sistemas mais populares partindo do ponto de vista do senso comum. Sendo elas:
+Tendo em vista as questões de pesquisa apresentadas, foram formuladas algumas hipóteses informais pelo grupo deste projeto. Essas hipóteses trazem o que se espera dos sistemas mais populares partindo do ponto de vista do senso comum. Sendo elas:
 
 - **H01 (RQ01):** Sistemas populares são relativamente antigos, com idade média entre 7–8 anos.
-- **H02 (RQ02):** Sistemas populares recebem bastante contribuição externa, com muitos pull requests e colaboradores de fora da equipe principal.
+- **H02 (RQ02):** Sistemas populares recebem bastante contribuição, com muitos pull requests aceitos.
 - **H03 (RQ03):** Sistemas populares lançam novas versões com frequência.
 - **H04 (RQ04):** Sistemas populares possuem atividade constante, com commits regulares e atualizações frequentes no repositório.
 - **H05 (RQ05):** Sistemas populares tendem a ser escritos principalmente em linguagens amplamente utilizadas, especialmente JavaScript, Python e Java.
@@ -101,10 +101,10 @@ Após a coleta das informações inciais, é feito uma sumarização através de
 
 ### Métricas coletadas para cada RQ:
 
-#### RQ01 - Idade dos repositorios (anos)
+#### RQ01 - Idade dos repositórios (anos)
 - Mediana: 8.37
 - Média: 8.09
-- Moda: 12.15
+- Moda: 9
 
 #### RQ02 - Pull Requests Aceitos
 - Mediana: 702.0
@@ -116,14 +116,14 @@ Após a coleta das informações inciais, é feito uma sumarização através de
 - Média: 109.34
 - Moda: 0
 
-#### RQ04 - Dias desde ultima atualizacao 
+#### RQ04 - Dias desde última atualização 
 - Mediana: 7.0
 - Média: 7.01
 - Moda: 7
 
 #### RQ05 - Linguagens mais usadas 
 
-| Linguagem | Numero de Repositorios |
+| Linguagem | Número de Repositorios |
 | ------------- | ------------- |
 |Python              |189|
 |TypeScript          |156|
@@ -174,7 +174,7 @@ Após a coleta das informações inciais, é feito uma sumarização através de
 - Média: 79.95
 - Moda: 100.0
 
-#### RQ07 - Metricas por Linguagem 
+#### RQ07 - Métricas por Linguagem 
 **Linguagens mais populares:**
 - Python 
 - TypeScript
@@ -190,7 +190,52 @@ Após a coleta das informações inciais, é feito uma sumarização através de
 - Populares: 62.0
 - Outras: 3.0
 
-**Dias desde ultima atualização:** 
+**Dias desde última atualização:** 
 - Populares: 7.0
 - Outras: 7.0
 
+### Análise
+
+#### RQ01
+
+Os sistemas mais populares são mais maduros segundo as tendências centrais. Os valores encontrados são um pouco maiores do que o esperado da hipótese, mas ainda se aproximam do valor máximo hipotetizado de 8 anos. Para melhor vizualiação foi criado um histograma, por meio dele é possível observar que também há um conjunto consideravel de repositórios com cerca de 2 anos de idade e que a grande maioria está entre 8 - 11 anos.
+
+<img src="./charts/idade_resultados1000Repos.png" alt="Histograma da Idade dos Repositórios" width="500" height="500"/>
+
+#### RQ02
+
+Para essa questão, as tendências centrais de Pull Requests (PR) aceitos não foi uma boa métrica, pelo fato de que poucos repositório possuem uma quantidade extremamente elevada de PR aceitos. Para ilustrar essa descrepância, um historgrama foi feito. Ao observar o historgrama fica claro que existem outliers que impactam as tendências centrais, principalmente a média. Dessa forma, foi montado um gráfico de Função de Distribuição Cumulativa Empírica (EDF em inglês) com até 90º percentil para uma análise mais coerente dos dados.
+
+Por fim, com o EDF, média, moda e mediana fica claro que a maioria dos sistemas não recebe muita contribuição e que uma pequena parte dos projetos concentra grande parte dos PR aceitos. Assim, contrariando a hipótese previamente levantada. 
+
+<img src="./charts/pull_requests_aceitos_resultados1000Repos.png" alt="Histograma da Pull Requests Aceitos" width="500" height="500"/>
+
+<img src="./charts/pull_requests_aceitos_ECDF_resultados1000Repos.png" alt="EDF da Pull Requests Aceitos" width="500" height="500"/>
+
+#### RQ03
+
+Os sistemas mais populares Open Source do GitHub não lançam muitas releases. As métricas coletadas mostram uma situação semelhante à pergunta anterior, ou seja, uma pequena quantidade de repositório lança a maioria das releases. Isso pode ocorrer pelo fato de que os sistemas mais populares entre os 1000 recebem mais recursos, porém também pode acontecer de que vários sistemas não utilizam releases. De qualquer maneira, a hipótese é falsa de que sistemas populares lançam novas versões com frequência.
+
+#### RQ04
+
+A frequência de atualização do sistemas é muito parecida em todas as métricas coletadas, sendo basicamente iguais (7 dias). Na verdade, o mais provavel é que os repositórios são atualizados ainda mais frequentemente, diariamente, e a quantidade de dias obtida se deve ao fato de que os dados foram coletados há uma semana. Sendo assim, a hipótese de que os projetos populares receberiam muitas atualizações é verdadeira.
+
+#### RQ05
+
+Tendo com base a pesquisa do fórum Stack Overflow (disponível em: https://survey.stackoverflow.co/2025/), pode-se afirmar que os sistemas populares são escritos em linguagens de programação mais populares. Ao observar a tabela de lingugens que foi coletadas, a hipótese levantada para esta pergunta de pesquisa é verdadeira. Python, Javascript e Java estão presentes em uma grande quantidade de projetos, em especial, Python e Javascript (considerando Typescript) fazem parte de 474 projetos ou 47,4% dos projetos analisados.
+
+#### RQ06
+
+A análise da razão de issues fechadas nos 1000 repositórios mais populares do GitHub indica que, de fato, a maioria dos projetos mantém um alto percentual de issues resolvidas. A mediana de 86,56% mostra que pelo menos metade dos sistemas fecha mais de quatro quintos de suas issues, enquanto a média de 79,95% confirma a tendência geral de alta taxa de resolução. Além disso, a moda em 100% revela que é comum encontrar projetos que fecham praticamente todas as issues abertas. Esse padrão também é corroborado pelo histograma abaixo.
+
+<img src="./charts/issues_fechadas_resultados1000Repos.png" alt="Histograma da Proporção de Issues Fechadas dos Repositórios" width="500" height="500"/>
+
+Portanto, os dados dão suporte à hipótese H06, indicando que sistemas populares possuem, em média, um alto percentual de issues fechadas, refletindo um processo de manutenção ativo e consistente.
+
+#### RQ07
+
+Projetos desenvolvidos em linguagens populares (Python, TypeScript, JavaScript, Go e Java) recebem, em média, mais contribuições externas do que os escritos em linguagens menos utilizadas. Isso se reflete em uma mediana maior de pull requests aceitos (927 vs. 415) e um número significativamente superior de releases (62 vs. 3).
+
+Esses resultados confirmam parcialmente a hipótese H07, indicando que a popularidade da linguagem está associada a maior engajamento da comunidade e maior atividade de manutenção. Entretanto, a métrica de dias desde a última atualização mostrou-se equivalente entre os grupos, sugerindo que a frequência de atualização recente independe da linguagem adotada.
+
+<img src="./charts/linguagens_resultados1000Repos.png" alt="Gráfico Barra das Linguagens Mais Populares" width="500" height="500"/>
