@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 
 def analisar_repositorios(data_path: str):
     if not os.path.exists(data_path):
@@ -74,9 +75,30 @@ def analisar_repositorios(data_path: str):
     plt.savefig(os.path.join(charts_dir, f"idade_{file_stem}.png"))
     plt.close()
 
+    # Pull Requests Aceitos
+    df["mergedPRs"].dropna().hist(bins=30)
+    plt.title("Distribuição Pull Requests Aceitos")
+    plt.xlabel("Pull Requests Aceitos")
+    plt.ylabel("Quantidade")
+    plt.savefig(os.path.join(charts_dir, f"pull_requests_aceitos_{file_stem}.png"))
+    plt.close()
+
+    # Pull Requests Aceitos 90%
+    s = df["mergedPRs"].dropna()
+    limite = s.quantile(0.9)  # valor do percentil 90
+
+    x = np.sort(s[s <= limite])
+    y = np.arange(1, len(x)+1) / len(x)
+    plt.plot(x, y, marker=".", linestyle="none")
+    plt.title("ECDF de Pull Requests Aceitos (até o 90º percentil)")
+    plt.xlabel("Pull Requests Aceitos")
+    plt.ylabel("Proporção acumulada")
+    plt.savefig(os.path.join(charts_dir, f"pull_requests_aceitos_ECDF_{file_stem}.png"))
+    plt.close()
+
     # Top linguagens
-    df["primaryLanguage"].value_counts().head(10).plot(kind="bar", figsize=(8,8))
-    plt.title("Top 10 Linguagens Mais Populares")
+    df["primaryLanguage"].value_counts().head(5).plot(kind="bar", figsize=(7, 8))
+    plt.title("Top 5 Linguagens Mais Populares")
     plt.ylabel("Quantidade")
     plt.xlabel("Linguagem")
     plt.savefig(os.path.join(charts_dir, f"linguagens_{file_stem}.png"))
