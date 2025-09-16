@@ -1,7 +1,9 @@
 #!/usr/bin/env python
-import os, argparse
-import pandas as pd, numpy as np
+import os
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 from scipy.stats import pearsonr, spearmanr
 
 INP = "data/summary_per_repo.csv"
@@ -30,7 +32,7 @@ def corr_table(x, ys, df):
 
 def scatter(df, x, y, title, path):
     plt.figure()
-    plt.scatter(df[x], df[y], s=10, alpha=0.5)
+    plt.scatter(df[x], df[y], s=10, alpha=0.6)
     plt.xlabel(x); plt.ylabel(y); plt.title(title)
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
@@ -43,33 +45,31 @@ def export_pair(df, x, y):
         df[["repo_id", x, y]].dropna().to_csv(out, index=False)
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--export", action="store_true")
-    ap.add_argument("--export-only", action="store_true")
-    args = ap.parse_args()
-
     ensure(FIGDIR); ensure(EXPORT_DIR)
-    if not os.path.exists(INP): raise SystemExit(f"{INP} ausente.")
+    if not os.path.exists(INP):
+        raise SystemExit(f"{INP} ausente. Rode summarize antes.")
     df = pd.read_csv(INP)
 
-    # RQ1: popularidade (precisa de stars; caso ainda não exista, a tabela ficará parcial)
+    # RQ1 (popularidade) – requer stars; se não houver ainda, gera vazio
     if "stars" in df.columns:
         rq1 = corr_table("stars", QUALITY, df)
         rq1.to_csv("data/rq1_correlations.csv", index=False)
     else:
         pd.DataFrame(columns=["metric","pearson_r","pearson_p","spearman_rho","spearman_p","n"]).to_csv("data/rq1_correlations.csv", index=False)
 
-    # RQ2: maturidade
+    # RQ2 (maturidade)
     rq2 = corr_table("idade_anos", QUALITY, df); rq2.to_csv("data/rq2_correlations.csv", index=False)
-    # RQ3: atividade
+
+    # RQ3 (atividade)
     rq3 = corr_table("releases", QUALITY, df); rq3.to_csv("data/rq3_correlations.csv", index=False)
-    # RQ4: tamanho (LOC)
+
+    # RQ4 (tamanho – LOC médio)
     if "loc_mean" in df.columns:
         rq4 = corr_table("loc_mean", QUALITY, df); rq4.to_csv("data/rq4_loc_correlations.csv", index=False)
     else:
         pd.DataFrame(columns=["metric","pearson_r","pearson_p","spearman_rho","spearman_p","n"]).to_csv("data/rq4_loc_correlations.csv", index=False)
 
-    # Exports + gráficos por par
+    # SEMPRE exporta CSV por par (X,Y) e gera os gráficos
     pairs = []
     if "stars" in df.columns: pairs += [("stars", y) for y in QUALITY]
     pairs += [("idade_anos", y) for y in QUALITY]
@@ -78,12 +78,11 @@ def main():
 
     for x,y in pairs:
         export_pair(df, x, y)
-        if args.export and not args.export_only:
-            scatter(df, x, y, f"{x} vs {y}", os.path.join(FIGDIR, f"{x}_vs_{y}.png"))
+        scatter(df, x, y, f"{x} vs {y}", os.path.join(FIGDIR, f"{x}_vs_{y}.png"))
 
-    # Heatmap geral (se existir um conjunto mínimo)
+    # Heatmap (se houver colunas suficientes)
     cols = [c for c in ["stars","idade_anos","releases","loc_mean"] if c in df.columns] + [c for c in QUALITY if c in df.columns]
-    if args.export and not args.export_only and len(cols) >= 3:
+    if len(cols) >= 3:
         plt.figure()
         corr = df[cols].corr(method="pearson")
         im = plt.imshow(corr, interpolation="nearest")
@@ -95,7 +94,7 @@ def main():
         plt.savefig(os.path.join(FIGDIR, "heatmap_process_quality.png"), dpi=150)
         plt.close()
 
-    print("[OK] RQ1–RQ4 concluídas. Verifique data/ e data/figures/.")
+    print("[OK] RQ1–RQ4: tabelas em data/rq*.csv; pares em data/exports/; figuras em data/figures/.")
 
 if __name__ == "__main__":
     main()

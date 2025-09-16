@@ -1,85 +1,90 @@
-from github_graphql import fetch_repositories
-from csv_controller import save_to_csv, list_saved_results
-from analise import analisar_repositorios
-
+# main.py
 import os
 import subprocess
 import sys
+from glob import glob
+
+from analise import analisar_repositorios
+from csv_controller import list_saved_results, save_to_csv
+from github_graphql import fetch_repositories
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
+CHARTS_DIR = os.path.join(os.path.dirname(__file__), "charts")
+os.makedirs(DATA_DIR, exist_ok=True)
+os.makedirs(CHARTS_DIR, exist_ok=True)
 
 def print_main_menu():
-    print("\nBem-vindo ao buscador de repositórios do GitHub!")
-    print("1. Buscar dados dos repositórios mais populares (GraphQL)")
-    print("2. Analisar CSV salvo (gráficos exploratórios)")
-    print("3. Pipeline CK + RQ1–RQ4 (clonar, medir, unificar, sumarizar, correlações, figuras)")
-    print("4. Apenas gerar relatório (usa CSVs existentes em data/)")
+    print("\n=== LAB02 • Qualidade em Sistemas Java ===")
+    print("1. Buscar repositórios (GraphQL) e salvar CSV")
+    print("2. Análise exploratória (gera TODOS os gráficos em charts/)")
+    print("3. Pipeline completa CK + RQ1–RQ4 (gera figuras em data/figures/)")
+    print("4. Apenas gerar relatório (reports/report.md)")
     print("5. Sair")
-    option = input("Escolha uma opção: ").strip()
-    return option
+    return input("Escolha: ").strip()
 
-def run_make(target, top=None):
-    env = os.environ.copy()
-    if top:
-        env["TOP"] = str(top)
-    cmd = ["make", target]
-    print(f"[RUN] {' '.join(cmd)}  (TOP={env.get('TOP','(padrão)')})")
-    proc = subprocess.run(cmd, env=env)
-    if proc.returncode != 0:
-        print(f"[ERRO] Falha em make {target}")
-        sys.exit(1)
+def run(cmd, env=None):
+    print(f"[RUN] {cmd}")
+    rc = subprocess.call(cmd, shell=True, env=env or os.environ.copy())
+    if rc != 0:
+        print(f"[ERRO] Comando falhou (rc={rc}): {cmd}")
+        sys.exit(rc)
+
+def pick_latest_csv_in_data() -> str:
+    # prioriza data/repos.csv; senão, pega o resultadosNRepos.csv mais recente
+    repos = os.path.join(DATA_DIR, "repos.csv")
+    if os.path.exists(repos):
+        return repos
+    candidates = sorted(glob(os.path.join(DATA_DIR, "resultados*Repos.csv")))
+    if not candidates:
+        raise FileNotFoundError("Nenhum CSV em data/. Rode a opção 1 primeiro.")
+    return candidates[-1]
 
 if __name__ == '__main__':
     try:
         while True:
-            option = print_main_menu()
-            print()
-            if option == "1":
-                n_repos = int(input("Quantos repositórios deseja buscar? (10 a 1000) ").strip())
-                if n_repos not in range(10, 1001):
-                    print("Escolha inválida. Digite um número entre 10 e 1000.")
+            opt = print_main_menu()
+            if opt == "1":
+                n = int(input("Quantos repositórios (10–1000)? ").strip())
+                if n < 10 or n > 1000:
+                    print("Valor inválido.")
                     continue
-                print(f"Buscando dados dos {n_repos} repositórios mais populares...")
-                repositorios = fetch_repositories(n_repos)
-                save_to_csv(repositorios)
-                print(f"Dados salvos em data/resultados{n_repos}Repos.csv e/ou data/repos.csv (via make fetch).")
+                print(f"Coletando top-{n} repositórios Java...")
+                data = fetch_repositories(n)
+                path = save_to_csv(data)   # grava resultadosNRepos.csv e repos.csv
+                print(f"[OK] CSV salvo: {path} e data/repos.csv")
 
-            elif option == "2":
-                raw_data = list_saved_results()
-                if not raw_data:
-                    print("Nenhum CSV encontrado em data/. Busque repositórios primeiro.")
-                    continue
-                print("Resultados salvos:")
-                for idx, file in enumerate(raw_data, start=1):
-                    print(f"{idx} - {file}")
-                print("Escolha um arquivo para analisar ou '0' p/ voltar:")
-                choice = input("Digite sua escolha: ").strip()
-                if choice == "0":
-                    continue
-                try:
-                    choice = int(choice)
-                    if choice not in range(1, len(raw_data) + 1):
-                        raise ValueError
-                    file_to_open = raw_data[choice - 1]
-                    analisar_repositorios(os.path.join("data", file_to_open))
-                except ValueError:
-                    print("Escolha inválida.")
+            elif opt == "2":
+                # Gera TODOS os gráficos exploratórios com base no melhor CSV disponível
+                csv_path = pick_latest_csv_in_data()
+                print(f"[INFO] Explorando {csv_path} -> charts/")
+                analisar_repositorios(csv_path, auto_save=True, charts_dir=CHARTS_DIR)
+                print("[OK] Gráficos exploratórios em charts/")
 
-            elif option == "3":
-                top = input("TOP (padrão 1000) [Enter p/ padrão]: ").strip() or None
-                # pipeline completa com Makefile
-                run_make("all", top)
-                print("Pipeline CK + RQ1–RQ4 concluída. Veja data/ e reports/.")
+            elif opt == "3":
+                # Pipeline completa: fetch (já temos CSV? opcional), measure, merge, process, summarize, analyze, report
+                top = input("TOP (Enter = 1000): ").strip() or "1000"
+                env = os.environ.copy()
+                env["TOP"] = top
+                # Se você quiser recusar refetch caso já exista repos.csv, comente a próxima linha:
+                run("make fetch", env=env)
+                run("make measure", env=env)
+                run("make merge", env=env)
+                run("make process", env=env)
+                run("make summarize", env=env)
+                # analyze agora SEMPRE gera gráficos e CSVs por par
+                run("make analyze", env=env)
+                run("make report", env=env)
+                print("[OK] Pipeline completa. Verifique data/ e reports/.")
 
-            elif option == "4":
-                run_make("report")
-                print("Relatório (reports/report.md) gerado a partir de CSVs existentes.")
+            elif opt == "4":
+                run("make report")
+                print("[OK] Relatório em reports/report.md")
 
-            elif option == "5":
+            elif opt == "5":
                 print("Saindo...")
                 sys.exit(0)
             else:
                 print("Opção inválida.")
-
     except Exception as e:
-        print(f'Erro: {e}')
+        print(f"[ERRO] {e}")
+        sys.exit(1)
