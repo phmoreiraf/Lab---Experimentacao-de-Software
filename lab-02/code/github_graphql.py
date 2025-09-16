@@ -1,98 +1,181 @@
+# github_graphql.py
+# -----------------------------------------------------------
+# Coleta repositórios Java via GitHub GraphQL (top-N por stars),
+# incluindo stargazerCount (popularidade), releases (atividade),
+# datas (maturidade), linguagem principal e contadores de PRs/issues.
+# -----------------------------------------------------------
+
 import os
 import time
+import math
+import logging
+from typing import Dict, List, Optional
 
 import requests
 from dotenv import load_dotenv
 
-# Carrega variáveis do .env
+# -----------------------------------------------------------
+# Configuração básica
+# -----------------------------------------------------------
 load_dotenv()
-GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+GITHUB_GRAPHQL = os.getenv("GITHUB_GRAPHQL_URL", "https://api.github.com/graphql")
 
 if not GITHUB_TOKEN:
-    raise Exception("Erro: GITHUB_TOKEN não encontrado no arquivo .env")
+    raise RuntimeError(
+        "GITHUB_TOKEN não encontrado. Defina no .env ou no ambiente."
+    )
 
-query = """
-query find($numRepos: Int!) {
-  search(query: "stars:>1 sort:stars language:Java", type: REPOSITORY, first: $numRepos) {
-    nodes {
-      ... on Repository {
-        createdAt
-        releases { totalCount }
-        id
-        url
-        stargazerCount
-      }
-    }
+HEADERS = {
+    "Authorization": f"Bearer {GITHUB_TOKEN}",
+    "Accept": "application/vnd.github+json",
+    "Content-Type": "application/json",
+    # Dica: Se quiser detalhar rate-limit no response, use também:
+    # "GraphQL-Features": "graphql-explorer-rli",
+}
+
+# -----------------------------------------------------------
+# Query GraphQL
+# - Busca repositórios em Java ordenados por estrelas.
+# - Traz métricas necessárias ao LAB02.
+# -----------------------------------------------------------
+SEARCH_QUERY = """
+query ($pageSize: Int!, $afterCursor: String) {
+  search(
+    query: "language:Java sort:stars-desc",
+    type: REPOSITORY,
+    first: $pageSize,
+    after: $afterCursor
+  ) {
+    repositoryCount
     pageInfo {
       endCursor
       hasNextPage
+    }
+    nodes {
+      ... on Repository {
+        nameWithOwner
+        stargazerCount
+        createdAt
+        updatedAt
+        primaryLanguage { name }
+        pullRequests(states: MERGED) { totalCount }
+        releases { totalCount }
+        issues: issues { totalCount }
+        closedIssues: issues(states: CLOSED) { totalCount }
+      }
     }
   }
 }
 """
 
-headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}
+# -----------------------------------------------------------
+# Funções utilitárias
+# -----------------------------------------------------------
+def _post_graphql(payload: Dict, session: Optional[requests.Session] = None) -> requests.Response:
+    """Executa POST em /graphql com backoff simples e tratamento de erros transitórios."""
+    max_retries = 5
+    backoff = 2.0
+    sess = session or requests.Session()
+
+    for attempt in range(1, max_retries + 1):
+        resp = sess.post(GITHUB_GRAPHQL, json=payload, headers=HEADERS, timeout=60)
+        # 2xx
+        if 200 <= resp.status_code < 300:
+            # Também checar erros GraphQL (campo "errors")
+            data = resp.json()
+            if "errors" in data:
+                # Se for rate limit ou abuso, tente backoff
+                msg = str(data["errors"])
+                if "rate limit" in msg.lower() or "abuse" in msg.lower():
+                    time.sleep(backoff)
+                    backoff *= 1.6
+                    continue
+                # Erro irrecuperável
+                raise RuntimeError(f"Erro GraphQL: {data['errors']}")
+            return resp
+
+        # Se 4xx (exceto 403 rate-limit/abuse) não vale insistir muito
+        if 400 <= resp.status_code < 500 and resp.status_code not in (403, 429):
+            raise RuntimeError(
+                f"Erro {resp.status_code} na API GraphQL: {resp.text}"
+            )
+
+        # Para 5xx, 403 (rate limit/abuse) e 429, aplicar backoff
+        time.sleep(backoff)
+        backoff *= 1.6
+
+    # Última tentativa falhou
+    resp.raise_for_status()
+    return resp  # pragma: no cover
 
 
-def fetch_repositories(total_repos=100):
-    results = []
-    page_size = 20
+def _normalize_node(node: Dict) -> Dict:
+    """Normaliza um nó de repositório para o formato que gravamos no CSV."""
+    primary_lang = None
+    if node.get("primaryLanguage") and isinstance(node["primaryLanguage"], dict):
+        primary_lang = node["primaryLanguage"].get("name")
+
+    return {
+        "nameWithOwner": node.get("nameWithOwner"),
+        "stargazerCount": node.get("stargazerCount"),
+        "createdAt": node.get("createdAt"),
+        "updatedAt": node.get("updatedAt"),
+        "primaryLanguage": primary_lang,
+        "mergedPRs": (node.get("pullRequests") or {}).get("totalCount", 0),
+        "releases": (node.get("releases") or {}).get("totalCount", 0),
+        "totalIssues": (node.get("issues") or {}).get("totalCount", 0),
+        "closedIssues": (node.get("closedIssues") or {}).get("totalCount", 0),
+    }
+
+
+# -----------------------------------------------------------
+# API pública
+# -----------------------------------------------------------
+def fetch_repositories(n_repos: int) -> List[Dict]:
+    """
+    Busca os top-N repositórios Java por estrelas usando GraphQL.
+    Retorna uma lista de dicionários com campos prontos para salvar no CSV.
+    """
+    if n_repos < 1 or n_repos > 1000:
+        raise ValueError("n_repos deve estar entre 1 e 1000 (limite da busca do GitHub).")
+
+    results: List[Dict] = []
     after_cursor = None
 
-    while len(results) < total_repos:
-        variables = {
-            "pageSize": page_size,
-            "afterCursor": after_cursor
-        }
+    with requests.Session() as sess:
+        while len(results) < n_repos:
+            page_size = min(100, n_repos - len(results))
+            payload = {
+                "query": SEARCH_QUERY,
+                "variables": {"pageSize": page_size, "afterCursor": after_cursor},
+            }
+            resp = _post_graphql(payload, sess)
+            data = resp.json()
+            search = data.get("data", {}).get("search", {})
 
-        # Tentativa com retry automático
-        for tentativa in range(3):
-            try:
-                response = requests.post(
-                    "https://api.github.com/graphql",
-                    json={"query": query, "variables": variables},
-                    headers=headers,
-                    timeout=15  # evita travar indefinidamente
+            nodes = search.get("nodes", []) or []
+            for node in nodes:
+                repo = _normalize_node(node)
+                # sanity: repositório precisa ter owner/name
+                if repo["nameWithOwner"]:
+                    results.append(repo)
+                    if len(results) >= n_repos:
+                        break
+
+            page_info = search.get("pageInfo", {})
+            has_next = page_info.get("hasNextPage", False)
+            after_cursor = page_info.get("endCursor")
+
+            # Segurança para evitar loop infinito (caso raro)
+            if not has_next and len(results) < n_repos:
+                logging.warning(
+                    "Busca encerrou antes de atingir n_repos; retornando %d itens.",
+                    len(results),
                 )
+                break
 
-                if response.status_code == 200:
-                    break
-                else:
-                    print(f"[AVISO] Falha {response.status_code}, tentativa {tentativa+1}/3")
-                    print(f"[DEBUG] Conteúdo da resposta: {response.text}")
-                    time.sleep(3)
+            # Respeitar a API
+            time.sleep(0.7)
 
-            except requests.exceptions.RequestException as e:
-                print(f"[ERRO] Problema de conexão: {e}, tentativa {tentativa+1}/3")
-                time.sleep(3)
-        else:
-            print(f"[ERRO] Query falhou após 3 tentativas. Última resposta:")
-            print(f"Status: {response.status_code}")
-            print(f"Headers: {response.headers}")
-            print(f"Body: {response.text}")
-            raise Exception(f"Query falhou após 3 tentativas: {response.status_code}, {response.text}")
-
-        try:
-            data = response.json().get("data", {}).get("search", None)
-        except Exception as e:
-            print(f"[ERRO] Falha ao decodificar JSON da resposta: {e}")
-            print(f"Resposta bruta: {response.text}")
-            raise
-        if not data:
-            print(f"[ERRO] Resposta inesperada da API:")
-            print(f"Status: {response.status_code}")
-            print(f"Headers: {response.headers}")
-            print(f"Body: {response.text}")
-            raise Exception(f"Resposta inesperada da API: {response.text}")
-
-        results.extend(data["nodes"])
-
-        if not data["pageInfo"]["hasNextPage"]:
-            break
-
-        after_cursor = data["pageInfo"]["endCursor"]
-        remaining = total_repos - len(results)
-
-        time.sleep(1)  # evita sobrecarregar a API
-
-    return results[:total_repos]
+    return results
