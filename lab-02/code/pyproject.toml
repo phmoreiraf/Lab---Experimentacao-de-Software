@@ -1,0 +1,12 @@
+[project]
+name = "meu_modulo"
+version = "0.1.0"
+description = "Exemplo de módulo local"
+authors = [
+    { name = "Seu Nome", email = "seuemail@example.com" }
+]
+dependencies = []
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
