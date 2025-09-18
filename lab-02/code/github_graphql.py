@@ -12,8 +12,8 @@ if not GITHUB_TOKEN:
     raise Exception("Erro: GITHUB_TOKEN não encontrado no arquivo .env")
 
 query = """
-query find($numRepos: Int!, $afterCursor: String) {
-  search(query: "stars:>1 sort:stars language:Java", type: REPOSITORY, first: $numRepos) {
+query find($pageSize: Int!, $afterCursor: String) {
+  search(query: "stars:>1 sort:stars language:Java", type: REPOSITORY, first: $pageSize, after: $afterCursor) {
     nodes {
       ... on Repository {
         createdAt
