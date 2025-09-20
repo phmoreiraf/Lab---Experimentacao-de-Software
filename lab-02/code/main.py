@@ -4,6 +4,7 @@ import os
 from github_graphql import fetch_repositories
 from csv_controller import (save_to_csv, list_saved_results)
 from ck_metrics_extractor import run_ck
+from analyze import run_analysis
 
 def print_main_menu():
     print("\nBem-vindo ao Lab 02!")
@@ -13,6 +14,34 @@ def print_main_menu():
     print("4. Sair")
     option = input("Escolha uma opção: ").strip()
     return option
+
+def choose_repos():
+    raw_data = list_saved_results()
+    if not raw_data:
+        print("Nenhum resultado salvo encontrado. Busque repositórios primeiro.")
+        return None
+    print("Resultados salvos:")
+    count = 1
+    for file in raw_data:
+        print(f"{count} - {file}")
+        count += 1
+    print("Escolha um arquivo para analisar ou '0' para voltar ao menu principal:")
+
+    choice = input("Digite sua escolha: ").strip()
+    if choice == "0":
+        return None
+    
+    choice = int(choice)
+    if choice not in range(1, count):
+        print("Escolha inválida.")
+        return None
+        
+    file_to_open = raw_data[choice - 1]
+    data_path = f"../data/raw_repos/{file_to_open}"
+    if not os.path.exists(data_path):
+        print(f"Arquivo {data_path} não encontrado.")
+        return None
+    return data_path
 
 if __name__ == '__main__':
     try:
@@ -32,34 +61,19 @@ if __name__ == '__main__':
                 print(f"Dados salvos em ../data/raw_repos/resultados{n_repos}Repos.csv")
 
             elif(option == "2"):
-                raw_data = list_saved_results()
-                if not raw_data:
-                    print("Nenhum resultado salvo encontrado. Busque repositórios primeiro.")
-                    continue
-                print("Resultados salvos:")
-                count = 1
-                for file in raw_data:
-                    print(f"{count} - {file}")
-                    count += 1
-                print("Escolha um arquivo para analisar ou '0' para voltar ao menu principal:")
-
-                choice = input("Digite sua escolha: ").strip()
-                if choice == "0":
-                    continue
-                
-                choice = int(choice)
-                if choice not in range(1, count):
-                    print("Escolha inválida.")
-                    continue
-                    
-                file_to_open = raw_data[choice - 1]
-                data_path = f"../data/raw_repos/{file_to_open}"
-                if not os.path.exists(data_path):
-                    print(f"Arquivo {data_path} não encontrado.")
+                data_path = choose_repos()
+                if not data_path:
                     continue
                 df = pd.read_csv(data_path)
                 print(f"Rodando CK no arquivo {data_path}...")
                 run_ck(df)
+            
+            elif(option == "3"):
+                print("Análise estatística ainda não implementada.")
+                data_path = choose_repos()
+                if not data_path:
+                    continue
+                run_analysis(data_path)
 
             else:
                 print("Saindo...")
