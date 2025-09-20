@@ -23,9 +23,8 @@ def clone_zip_repo(repo_url, dest_dir):
         zip_ref.extractall(dest_dir)
         root_folder = zip_ref.namelist()[0].split("/")[0]
     
-
+    os.remove(zip_path)
     return os.path.join(dest_dir, root_folder)
-
 
 
 def delete_repo(repo_dir):
@@ -33,13 +32,15 @@ def delete_repo(repo_dir):
         shutil.rmtree(repo_dir)
 
 def run_ck(df):
+    desktop_dir = os.path.join(os.path.expanduser("~"), "Desktop")
 
     for index, row in df.iterrows():
         repo_name = row['nameWithOwner']
         default_branch = row['defaultBranchRef']
         print(f"Processando repositório {repo_name} (branch: {default_branch})...")
 
-        base_dir = os.path.join("..\\data", "metrics_raw", repo_name.replace("/", "_"))
+        # Coloque o diretório base para clonar o repositório
+        base_dir = os.path.join(desktop_dir, "ck_m", repo_name.replace("/", "_"))
         os.makedirs(base_dir, exist_ok=True)
 
         output_dir = os.path.join(base_dir, "ck_output")
@@ -82,7 +83,11 @@ def run_ck(df):
             subprocess.run(cmd, check=True)
         except subprocess.CalledProcessError as e:
             print("Erro ao executar o CK:", e)
-            sys.exit(1)
+            print("STDOUT:", e.stdout)
+            print("STDERR:", e.stderr)
+            continue
+
+        shutil.rmtree(repo_dir)
 
         # Caminhos para os arquivos gerados
         files = {
