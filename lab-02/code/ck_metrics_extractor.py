@@ -77,8 +77,6 @@ def run_ck(df):
             output_dir + os.sep
         ]
 
-        time.sleep(1)
-
         try:
             subprocess.run(cmd, check=True)
         except subprocess.CalledProcessError as e:
@@ -86,8 +84,6 @@ def run_ck(df):
             print("STDOUT:", e.stdout)
             print("STDERR:", e.stderr)
             continue
-
-        shutil.rmtree(repo_dir)
 
         # Caminhos para os arquivos gerados
         files = {
@@ -113,6 +109,9 @@ def run_ck(df):
         # Confirma se variable.csv existe (aviso)
         if not os.path.exists(files['variable']):
             print("Aviso: variable.csv não encontrado. Métricas de variáveis não estarão disponíveis.")
+        
+        time.sleep(0.5) 
+        delete_repo(repo_dir) 
 
         print(f"[OK] Métricas salvas em {output_dir}")
         
