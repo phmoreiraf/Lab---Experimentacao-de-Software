@@ -14,7 +14,7 @@ def clone_zip_repo(repo_url, dest_dir):
     os.makedirs(dest_dir, exist_ok=True)
 
     zip_path = os.path.join(dest_dir, "repo.zip")
-    result = os.system(f"curl -L {repo_url} -o {zip_path}")
+    result = os.system(f"curl -sS -L {repo_url} -o {zip_path}")
     if result != 0:
         raise Exception(f"Erro ao baixar o repositório {repo_url}")
 
@@ -37,7 +37,7 @@ def run_ck(df):
     for index, row in df.iterrows():
         repo_name = row['nameWithOwner']
         default_branch = row['defaultBranchRef']
-        print(f"Processando repositório {repo_name} (branch: {default_branch})...")
+        # print(f"Processando repositório {repo_name} (branch: {default_branch})...")
 
         # Coloque o diretório base para clonar o repositório
         base_dir = os.path.join(desktop_dir, "ck_m", repo_name.replace("/", "_"))
@@ -48,7 +48,7 @@ def run_ck(df):
         
         # Clona o repositório
         zip_url = f"https://github.com/{repo_name}/archive/refs/heads/{default_branch}.zip"
-        print(f"[+] Clonando {zip_url} ...")
+        # print(f"[+] Clonando {zip_url} ...")
         repo_dir = os.path.join(base_dir, "source")
         try:
             repo_dir = clone_zip_repo(zip_url, repo_dir)
@@ -64,7 +64,7 @@ def run_ck(df):
             shutil.rmtree(output_dir)
         os.makedirs(output_dir)
 
-        print(f"[+] Executando CK Tool nas fontes em {repo_dir} ...")
+        # print(f"[+] Executando CK Tool nas fontes em {repo_dir} ...")
 
         jar_path = os.path.join("ck", "target", "ck-0.7.1-SNAPSHOT-jar-with-dependencies.jar")
         
@@ -81,38 +81,13 @@ def run_ck(df):
             subprocess.run(cmd, check=True)
         except subprocess.CalledProcessError as e:
             print("Erro ao executar o CK:", e)
-            print("STDOUT:", e.stdout)
-            print("STDERR:", e.stderr)
+            # print("STDOUT:", e.stdout)
+            # print("STDERR:", e.stderr)
             continue
-
-        # Caminhos para os arquivos gerados
-        files = {
-            'class': os.path.join(output_dir, 'class.csv'),
-            'field': os.path.join(output_dir, 'field.csv'),
-            'method': os.path.join(output_dir, 'method.csv'),
-            'variable': os.path.join(output_dir, 'variable.csv'),
-        }
-
-        # Confirma se class.csv existe
-        if not os.path.exists(files['class']):
-            print("Erro: class.csv não encontrado.")
-            sys.exit(1)
-
-        # Confirma se field.csv existe (aviso)
-        if not os.path.exists(files['field']):
-            print("Aviso: field.csv não encontrado. Métricas de campos não estarão disponíveis.")
-
-        # Confirma se method.csv existe (aviso)
-        if not os.path.exists(files['method']):
-            print("Aviso: method.csv não encontrado. Métricas por método não estarão disponíveis.")
-
-        # Confirma se variable.csv existe (aviso)
-        if not os.path.exists(files['variable']):
-            print("Aviso: variable.csv não encontrado. Métricas de variáveis não estarão disponíveis.")
         
         time.sleep(0.5) 
         delete_repo(repo_dir) 
 
-        print(f"[OK] Métricas salvas em {output_dir}")
+        # print(f"[OK] Métricas salvas em {output_dir}")
         
 

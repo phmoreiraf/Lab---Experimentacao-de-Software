@@ -1,5 +1,7 @@
 import pandas as pd
 import os
+import concurrent.futures
+import math
 
 from github_graphql import fetch_repositories
 from csv_controller import (save_to_csv, list_saved_results)
@@ -66,10 +68,27 @@ if __name__ == '__main__':
                     continue
                 df = pd.read_csv(data_path)
                 print(f"Rodando CK no arquivo {data_path}...")
-                run_ck(df)
+                max_threads = 5
+
+                def split_df(df, n_chunks):
+                    chunk_size = math.ceil(len(df) / n_chunks)
+                    return [df.iloc[i*chunk_size:(i+1)*chunk_size] for i in range(n_chunks)]
+
+                df_chunks = split_df(df, max_threads)
+
+                # Função wrapper para rodar cada chunk
+                def process_chunk(chunk):
+                    run_ck(chunk)
+
+                with concurrent.futures.ThreadPoolExecutor(max_workers=max_threads) as executor:
+                    futures = [executor.submit(process_chunk, chunk) for chunk in df_chunks]
+                    for future in concurrent.futures.as_completed(futures):
+                        try:
+                            future.result()  # lança exceções se houver
+                        except Exception as e:
+                            print(f"[ERRO] Um chunk falhou: {e}")
             
             elif(option == "3"):
-                print("Análise estatística ainda não implementada.")
                 data_path = choose_repos()
                 if not data_path:
                     continue
