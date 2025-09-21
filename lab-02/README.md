@@ -19,15 +19,16 @@ Com essas respostas, busca-se entender melhor os aspectos de qualidade de softwa
 
 ## Metodologia
 
+O presente estudo seguiu um processo de mineração e análise de dados em múltiplas etapas, conforme descrito a seguir:
 
 
-### Métricas
+### 1. Métricas
 
 Para cada questão de pesquisa, realiza-se a comparação entre as características do processo de desenvolvimento dos repositórios e os valores obtidos. As métricas coletadas são:
 
 Para as métricas de processo, define-se:
 - **Popularidade**: número de estrelas
-- **Tamanho**: linhas de código (LOC) e linhas de comentários
+- **Tamanho**: linhas de código (LOC) 
 - **Atividade**: número de releases
 - **Maturidade**: idade (em anos) de cada repositório coletado
 
@@ -35,6 +36,42 @@ Por métricas de qualidade, entende-se:
 - **CBO**: Coupling between objects
 - **DIT**: Depth Inheritance Tree
 - **LCOM**: Lack of Cohesion of Methods
+
+### 2. Coleta de Repositórios
+Inicialmente, foram minerados **1.000 repositórios Java mais populares** a partir da API GraphQL do GitHub. Por meio da mineração inicial foram obtidas as métricas de processo, exceto LOC.
+
+### 2. Extração de Métricas de Qualidade
+Para a análise da qualidade interna, utilizou-se a ferramenta **CK (Chidamber & Kemerer)**, que gera métricas em nível de classe. Coletando assim as métricas de qualidade e o número de linhas de código.
+
+Os valores de métricas por classe foram agregados ao nível de repositório, utilizando a **média aritmética**.
+
+### 3. Tratamento dos Dados
+Após a coleta, foi necessário aplicar técnicas de limpeza e transformação dos dados brutos, em razão da presença de valores extremos. As principais etapas foram:
+
+- **Filtragem pelo 96º percentil:** registros acima desse limiar foram removidos, reduzindo substancialmente a dispersão dos dados. Como exemplo, a métrica `lcom_mean` apresentou queda de um desvio padrão de **1.700** para cerca de **36**, o que resultou em uma distribuição mais estável e interpretável.  
+- **Trimmed Mean:** utilizou-se também a técnica de média truncada (*trimmed mean*), que consiste em descartar sistematicamente os valores extremos antes do cálculo da média, aumentando a robustez contra outliers. Esta abordagem é fundamentada nos trabalhos clássicos de **Tukey (1962)** e **Huber (1964)**, amplamente utilizados em estatística robusta.  
+
+> *Referências*:  
+> Tukey, J. W. (1962). *The Future of Data Analysis*. Annals of Mathematical Statistics, 33(1), 1–67.  
+> Huber, P. J. (1964). *Robust Estimation of a Location Parameter*. Annals of Mathematical Statistics, 35(1), 73–101.  
+
+
+### 4. Análise Estatística
+Para cada métrica, foram calculadas medidas de tendência central e dispersão:
+
+- **Média**  
+- **Mediana**  
+- **Desvio padrão**  
+
+Além disso, foram gerados **gráficos exploratórios** para avaliar as distribuições e correlações:
+
+- **Boxplots**: análise de dispersão e detecção de outliers.  
+- **Histogramas**: distribuição de frequências.  
+- **Scatter plots**: relações bivariadas.  
+- **Heatmaps**: visualização de densidade e correlações entre métricas.  
+
+### 5. Confiabilidade Estatística
+Por fim, para avaliar a relação entre as métricas de processo e de qualidade, aplicamos medidas de **correlação (Pearson e Spearman)**, fornecendo robustez aos achados empíricos.
 
 ### Hipóteses Informais
 
@@ -57,7 +94,7 @@ Por métricas de qualidade, entende-se:
 
 ## Resultados Obtidos
 
-| | média | mediana | desvio-padrão | moda |
+| métrica | média | mediana | desvio-padrão | moda |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
 | releases | 37.104494 | 10.000000 | 85.012613 | 0.0 |
 | número de estrelas | 9060.993258 | 5614.500000 | 10363.733200 | 3504.0 |
@@ -67,7 +104,42 @@ Por métricas de qualidade, entende-se:
 | DIT média | 1.449279 | 1.380952 | 0.356645 | 1.0 |
 | LCOM média | 33.453302 | 21.413314 | 36.626377 | 0.0 |
 
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <img src="./charts/charts_890_repos/histogram/Hist_loc.png" alt="Histograma de LOC Repositórios" width="400" height="400"/>
+    <img src="./charts/charts_890_repos/histogram/Hist_cbo_mean.png" alt="Histograma de CBO dos Repositórios" width="400" height="400"/>
+</div>
+<br>
+
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <img src="./charts/charts_890_repos/histogram/Hist_dit_mean.png" alt="Histograma de DIT dos Repositórios" width="400" height="400"/>
+    <img src="./charts/charts_890_repos/histogram/Hist_lcom_mean.png" alt="Histograma de LCOM dos Repositórios" width="400" height="400"/>
+</div>
+<br>
+
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <img src="./charts/charts_890_repos/Heatmap_pearson.png" alt="Mapa de Calor da Correlação de Pearson" width="400" height="400"/>
+    <img src="./charts/charts_890_repos/Heatmap_spearman.png" alt="Mapa de Calor da Correlação de Spearman" width="400" height="400"/>
+</div>
+
 ### RQ 01
+
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <img src="./charts/charts_890_repos/boxplot/Box_RQ01_cbo_mean.png" alt="Boxplot média CBO RQ01" width="400" height="400"/>
+    <img src="./charts/charts_890_repos/scatter/Scatter_RQ01_stargazerCount_vs_cbo_mean.png" alt="Scatter média CBO RQ01" width="400" height="400"/>
+</div>
+<br>
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <img src="./charts/charts_890_repos/boxplot/Box_RQ01_dit_mean.png" alt="Boxplot média DIT RQ01" width="400" height="400"/>
+    <img src="./charts/charts_890_repos/scatter/Scatter_RQ01_stargazerCount_vs_dit_mean.png" alt="Scatter média DIT RQ01" width="400" height="400"/>
+</div>
+<br>
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <img src="./charts/charts_890_repos/boxplot/Box_RQ01_lcom_mean.png" alt="Boxplot média LCOM RQ01" width="400" height="400"/>
+    <img src="./charts/charts_890_repos/scatter/Scatter_RQ01_stargazerCount_vs_lcom_mean.png" alt="Scatter média LCOM RQ01" width="400" height="400"/>
+</div>
+<br>
+<img src="./charts/charts_890_repos/boxplot/Box_RQ01_loc.png" alt="Boxplot loc RQ01" width="400" height="400"/>
+<br>
 
 Correlações (Pearson/Spearman) entre `stargazerCount (número de estrelas)` e as métricas de qualidade:  
   - CBO: -0.13 (Pearson), +0.01 (Spearman)  
@@ -76,6 +148,24 @@ Correlações (Pearson/Spearman) entre `stargazerCount (número de estrelas)` e 
     
 ### RQ 02
 
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <img src="./charts/charts_890_repos/boxplot/Box_RQ02_cbo_mean.png" alt="Boxplot média CBO RQ02" width="400" height="400"/>
+    <img src="./charts/charts_890_repos/scatter/Scatter_RQ02_age_years_vs_cbo_mean.png" alt="Scatter média CBO RQ02" width="400" height="400"/>
+</div>
+<br>
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <img src="./charts/charts_890_repos/boxplot/Box_RQ02_dit_mean.png" alt="Boxplot média DIT RQ02" width="400" height="400"/>
+    <img src="./charts/charts_890_repos/scatter/Scatter_RQ02_age_years_vs_dit_mean.png" alt="Scatter média DIT RQ02" width="400" height="400"/>
+</div>
+<br>
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <img src="./charts/charts_890_repos/boxplot/Box_RQ02_lcom_mean.png" alt="Boxplot média LCOM RQ02" width="400" height="400"/>
+    <img src="./charts/charts_890_repos/scatter/Scatter_RQ02_age_years_vs_lcom_mean.png" alt="Scatter média LCOM RQ02" width="400" height="400"/>
+</div>
+<br>
+<img src="./charts/charts_890_repos/boxplot/Box_RQ02_loc.png" alt="Boxplot loc RQ02" width="400" height="400"/>
+<br>
+
 Correlações (Pearson/Spearman) entre `anos` e as métricas de qualidade:
 - CBO × idade: -0.01 (Pearson), -0.04 (Spearman) → **quase nulo**  
 - DIT × idade: +0.19 / +0.28 → **correlação positiva moderada**  
@@ -83,12 +173,36 @@ Correlações (Pearson/Spearman) entre `anos` e as métricas de qualidade:
 
 ### RQ 03
 
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <img src="./charts/charts_890_repos/scatter/Scatter_RQ03_releases_vs_cbo_mean.png" alt="Scatter média CBO RQ03" width="400" height="400"/>
+    <img src="./charts/charts_890_repos/scatter/Scatter_RQ03_releases_vs_dit_mean.png" alt="Scatter média DIT RQ03" width="400" height="400"/>
+</div>
+<br>
+<img src="./charts/charts_890_repos/scatter/Scatter_RQ03_releases_vs_lcom_mean.png" alt="Scatter média LCOM RQ03" width="400" height="400"/>
+<br>
+
 Correlações (Pearson/Spearman) entre `releases` e as métricas de qualidade:
 - CBO × releases: +0.21 (Pearson), +0.41 (Spearman)  
 - DIT × releases: +0.06 / +0.21  
 - LCOM × releases: +0.16 / +0.35 
     
 ### RQ 04
+
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <img src="./charts/charts_890_repos/boxplot/Box_RQ04_cbo_mean.png" alt="Boxplot média CBO RQ04" width="400" height="400"/>
+    <img src="./charts/charts_890_repos/scatter/Scatter_RQ04_loc_vs_cbo_mean.png" alt="Scatter média CBO RQ04" width="400" height="400"/>
+</div>
+<br>
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <img src="./charts/charts_890_repos/boxplot/Box_RQ04_dit_mean.png" alt="Boxplot média DIT RQ04" width="400" height="400"/>
+    <img src="./charts/charts_890_repos/scatter/Scatter_RQ04_loc_vs_dit_mean.png" alt="Scatter média DIT RQ04" width="400" height="400"/>
+</div>
+<br>
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <img src="./charts/charts_890_repos/boxplot/Box_RQ04_lcom_mean.png" alt="Boxplot média LCOM RQ04" width="400" height="400"/>
+    <img src="./charts/charts_890_repos/scatter/Scatter_RQ04_loc_vs_lcom_mean.png" alt="Scatter média LCOM RQ04" width="400" height="400"/>
+</div>
+<br>
 
 Correlações (Pearson/Spearman) entre `LOC` e as métricas de qualidade:
 - CBO × LOC: +0.28 (Pearson), +0.39 (Spearman)  
