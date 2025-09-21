@@ -1,118 +1,29 @@
-# csv_controller.py
-# -----------------------------------------------------------
-# Utilitários para salvar CSVs de repositórios e listar resultados.
-# Agora inclui a coluna 'stargazerCount' (popularidade).
-# -----------------------------------------------------------
-
-import os
 import csv
-from typing import Dict, List
+import os
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
-os.makedirs(DATA_DIR, exist_ok=True)
+data_dir = os.path.join(os.path.dirname(__file__), "../data/raw_repos")
 
-# Nome canônico (usado pela pipeline do LAB02)
-CANONICAL_NAME = "repos.csv"
+def save_to_csv(repositories):
+    # Salva no diretório ../data
+    os.makedirs(data_dir, exist_ok=True)
+    file_path = os.path.join(data_dir, f"resultados{len(repositories)}Repos.csv")
 
-def _sanitize_int(value):
-    try:
-        return int(value)
-    except Exception:
-        return 0
-
-def save_to_csv(repositories: List[Dict], also_canonical: bool = True) -> str:
-    """
-    Salva a lista de repositórios em:
-      - data/resultados{N}Repos.csv (onde N = quantidade de registros)
-      - opcionalmente também em data/repos.csv (nome canônico da pipeline)
-
-    Retorna o caminho do arquivo específico salvo (resultados{N}Repos.csv).
-    """
-    if not repositories:
-        raise ValueError("Lista de repositórios vazia.")
-
-    n = len(repositories)
-    specific_name = f"resultados{n}Repos.csv"
-    specific_path = os.path.join(DATA_DIR, specific_name)
-
-    # Cabeçalho padronizado (inclui stargazerCount)
-    header = [
-        "nameWithOwner",
-        "stargazerCount",
-        "createdAt",
-        "updatedAt",
-        "primaryLanguage",
-        "mergedPRs",
-        "releases",
-        "totalIssues",
-        "closedIssues",
-    ]
-
-    # Grava arquivo específico
-    with open(specific_path, "w", newline="", encoding="utf-8") as f:
-        w = csv.writer(f)
-        w.writerow(header)
+    with open(file_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow([
+            "nameWithOwner", "createdAt", "releases",
+            "stargazerCount", "defaultBranchRef"
+        ])
         for repo in repositories:
-            w.writerow([
-                repo.get("nameWithOwner"),
-                _sanitize_int(repo.get("stargazerCount")),
-                repo.get("createdAt"),
-                repo.get("updatedAt"),
-                repo.get("primaryLanguage"),
-                _sanitize_int(repo.get("mergedPRs")),
-                _sanitize_int(repo.get("releases")),
-                _sanitize_int(repo.get("totalIssues")),
-                _sanitize_int(repo.get("closedIssues")),
+            writer.writerow([
+                repo['nameWithOwner'],
+                repo['createdAt'],
+                repo['releases']['totalCount'],
+                repo['stargazerCount'],
+                repo['defaultBranchRef']['name'] if repo['defaultBranchRef'] else 'main'
             ])
 
-    # Grava o canônico data/repos.csv (utilizado pelos próximos estágios da pipeline)
-    if also_canonical:
-        canonical_path = os.path.join(DATA_DIR, CANONICAL_NAME)
-        with open(canonical_path, "w", newline="", encoding="utf-8") as f:
-            w = csv.writer(f)
-            w.writerow(header)
-            for repo in repositories:
-                w.writerow([
-                    repo.get("nameWithOwner"),
-                    _sanitize_int(repo.get("stargazerCount")),
-                    repo.get("createdAt"),
-                    repo.get("updatedAt"),
-                    repo.get("primaryLanguage"),
-                    _sanitize_int(repo.get("mergedPRs")),
-                    _sanitize_int(repo.get("releases")),
-                    _sanitize_int(repo.get("totalIssues")),
-                    _sanitize_int(repo.get("closedIssues")),
-                ])
-
-    return specific_path
-
-
-def list_saved_results() -> List[str]:
-    """
-    Lista arquivos CSV em data/ que o usuário pode escolher para análises exploratórias.
-    Retorna nomes relativos à pasta data/ (por exemplo, 'resultados100Repos.csv').
-    """
-    files = []
-    if not os.path.isdir(DATA_DIR):
-        return files
-
-    for name in os.listdir(DATA_DIR):
-        if not name.lower().endswith(".csv"):
-            continue
-        # Mostramos tanto o canônico (repos.csv) quanto os específicos (resultadosNRepos.csv)
-        if name == "repos.csv" or name.startswith("resultados"):
-            files.append(name)
-
-    # Ordena deixando repos.csv no topo e depois em ordem "natural" por N
-    def _key(nm: str):
-        if nm == "repos.csv":
-            return (0, 0)
-        # tentar extrair N de resultados{N}Repos.csv
-        # fallback para comparar por nome
-        try:
-            middle = nm.replace("resultados", "").replace("Repos.csv", "")
-            return (1, int(middle))
-        except Exception:
-            return (2, nm)
-
-    return sorted(files, key=_key)
+def list_saved_results():
+    files = os.listdir(data_dir)
+    csv_files = [f for f in files if f.endswith(".csv")]
+    return csv_files

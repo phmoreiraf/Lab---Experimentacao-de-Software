@@ -1,0 +1,139 @@
+[!] CK não encontrado para Snailclimb/JavaGuide
+[!] CK não encontrado para elastic/elasticsearch
+[!] CK não encontrado para NationalSecurityAgency/ghidra
+[!] CK não encontrado para dbeaver/dbeaver
+[!] CK não encontrado para hollischuang/toBeTopJavaer
+[!] CK não encontrado para Anuken/Mindustry
+[!] CK não encontrado para openjdk/jdk
+[!] CK não encontrado para oracle/graal
+[!] CK não encontrado para thingsboard/thingsboard
+[!] CK não encontrado para JetBrains/intellij-community
+[!] CK não encontrado para openzipkin/zipkin
+[!] CK não encontrado para Grasscutters/Grasscutter
+[!] CK não encontrado para questdb/questdb
+[!] CK não encontrado para neo4j/neo4j
+[!] CK não encontrado para eclipse-vertx/vert.x
+[!] CK não encontrado para zaproxy/zaproxy
+[!] CK não encontrado para projectlombok/lombok
+[!] CK não encontrado para trinodb/trino
+[!] CK não encontrado para frank-lam/fullstack-tutorial
+[!] CK não encontrado para aosp-mirror/platform_frameworks_base
+[!] CK não encontrado para react-native-camera/react-native-camera
+[!] CK não encontrado para checkstyle/checkstyle
+[!] CK não encontrado para facebook/buck
+[!] CK não encontrado para CoderLeixiaoshuai/java-eight-part
+[!] CK não encontrado para aa112901/remusic
+[!] CK não encontrado para google/j2objc
+[!] CK não encontrado para apache/groovy
+[!] CK não encontrado para RedSpider1/concurrent
+[!] CK não encontrado para dragonwell-project/dragonwell8
+[!] CK não encontrado para jlegewie/zotfile
+[!] CK não encontrado para karma9874/AndroRAT
+[!] CK não encontrado para JabRef/jabref
+[!] CK não encontrado para NotFound9/interviewGuide
+[!] CK não encontrado para ReChronoRain/HyperCeiler
+[!] CK não encontrado para eclipse-openj9/openj9
+[+] CK encontrado para 965 repositórios
+[!] CK não encontrado para 35 repositórios
+[i] Removidos 75 outliers de ['lcom_mean', 'loc'] (>{'lcom_mean': np.float64(228.47937419242174), 'loc': np.float64(520884.55999999994)})
+[i] Dataset final com 890 repositórios
+                        mean        median           std    mode
+releases           37.104494     10.000000     85.012613     0.0
+stargazerCount   9060.993258   5614.500000  10363.733200  3504.0
+age_years           9.047191      9.000000      2.987416     9.0
+loc             43380.949438  12473.000000  76875.067554     5.0
+cbo_mean            5.266339      5.233520      1.835075     0.0
+dit_mean            1.449279      1.380952      0.356645     1.0
+lcom_mean          33.453302     21.413314     36.626377     0.0
+
+=== RQ01 ===
+
+Pearson:
+releases          0.093452
+stargazerCount    1.000000
+age_years        -0.051496
+loc               0.125274
+cbo_mean         -0.132515
+dit_mean         -0.118121
+lcom_mean        -0.026540
+Name: stargazerCount, dtype: float64
+
+Spearman:
+releases          0.125367
+stargazerCount    1.000000
+age_years         0.063902
+loc               0.129905
+cbo_mean          0.008148
+dit_mean         -0.054970
+lcom_mean         0.011162
+Name: stargazerCount, dtype: float64
+
+=== RQ02 ===
+
+Pearson:
+releases         -0.007518
+stargazerCount   -0.051496
+age_years         1.000000
+loc               0.102640
+cbo_mean         -0.014516
+dit_mean          0.194292
+lcom_mean         0.139332
+Name: age_years, dtype: float64
+
+Spearman:
+releases         -0.022295
+stargazerCount    0.063902
+age_years         1.000000
+loc               0.096441
+cbo_mean         -0.037066
+dit_mean          0.282986
+lcom_mean         0.189564
+Name: age_years, dtype: float64
+
+=== RQ03 ===
+
+Pearson:
+releases          1.000000
+stargazerCount    0.093452
+age_years        -0.007518
+loc               0.324754
+cbo_mean          0.216396
+dit_mean          0.063865
+lcom_mean         0.156199
+Name: releases, dtype: float64
+
+Spearman:
+releases          1.000000
+stargazerCount    0.125367
+age_years        -0.022295
+loc               0.479005
+cbo_mean          0.414093
+dit_mean          0.218239
+lcom_mean         0.346518
+Name: releases, dtype: float64
+[!] Não foi possível criar boxplot para loc vs releases (RQ03): Bin labels must be one fewer than the number of bin edges
+[!] Não foi possível criar boxplot para cbo_mean vs releases (RQ03): Bin labels must be one fewer than the number of bin edges
+[!] Não foi possível criar boxplot para dit_mean vs releases (RQ03): Bin labels must be one fewer than the number of bin edges
+[!] Não foi possível criar boxplot para lcom_mean vs releases (RQ03): Bin labels must be one fewer than the number of bin edges
+
+=== RQ04 ===
+
+Pearson:
+releases          0.324754
+stargazerCount    0.125274
+age_years         0.102640
+loc               1.000000
+cbo_mean          0.284602
+dit_mean          0.102083
+lcom_mean         0.243529
+Name: loc, dtype: float64
+
+Spearman:
+releases          0.479005
+stargazerCount    0.129905
+age_years         0.096441
+loc               1.000000
+cbo_mean          0.393321
+dit_mean          0.273214
+lcom_mean         0.431574
+Name: loc, dtype: float64
