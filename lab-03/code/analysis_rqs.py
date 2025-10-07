@@ -1,10 +1,11 @@
 import os
-import pandas as pd
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import seaborn as sns
-from scipy import stats
 import statsmodels.api as sm
+from scipy import stats
 
 DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data"))
 PROC_DIR = os.path.join(DATA_DIR, "processed")
@@ -14,7 +15,8 @@ REPORT_PATH = os.path.join(DATA_DIR, "metrics_report.txt")
 NUM_METRICS = [
     "size_files","size_additions","size_deletions",
     "analysis_hours","desc_len_chars",
-    "interactions_participants","interactions_comments"
+    "interactions_participants","interactions_comments_issue",
+    "interactions_review_threads","interactions_comments"
 ]
 
 def _load_dataset(path: str = None) -> pd.DataFrame:
@@ -37,7 +39,7 @@ def _spearman_series(df: pd.DataFrame, y: str) -> pd.DataFrame:
     rows = []
     for x in NUM_METRICS:
         s = df[[x, y]].dropna()
-        if len(s) < 5: 
+        if len(s) < 5:
             rows.append({"metric": x, "rho": np.nan, "p": np.nan})
             continue
         rho, p = stats.spearmanr(s[x], s[y])
@@ -57,7 +59,7 @@ def _pearson_series(df: pd.DataFrame, y: str) -> pd.DataFrame:
 
 def _logit(df: pd.DataFrame, y: str, X_cols):
     s = df[X_cols + [y]].dropna()
-    if s.empty: 
+    if s.empty:
         return None
     X = sm.add_constant(s[X_cols])
     yv = s[y]
@@ -123,17 +125,17 @@ def charts_basic(df: pd.DataFrame):
 
 def rq_status_correlations(df: pd.DataFrame):
     _write("=== RQ A (feedback final / status MERGED vs CLOSED) ===")
-    # Spearman with binary final_status_bin
+    # Spearman com variável binária final_status_bin
     s = _spearman_series(df, "final_status_bin")
     _write("\nSpearman (rho, p) with final_status_bin=1 for MERGED:")
     _write(s.to_string(index=False))
 
-    # Also point-biserial (equivalent to Pearson with binary y)
+    # Point-biserial (Pearson com binária)
     p = _pearson_series(df, "final_status_bin")
     _write("\nPoint-biserial (Pearson) with final_status_bin:")
     _write(p.to_string(index=False))
 
-    # Logistic regression as robustness
+    # Regressão logística como robustez
     model = _logit(df, "final_status_bin", NUM_METRICS)
     if model:
         _write("\nLogistic regression (status_bin ~ metrics) summary:")
@@ -143,7 +145,6 @@ def rq_status_correlations(df: pd.DataFrame):
 
 def rq_reviews_correlations(df: pd.DataFrame):
     _write("\n=== RQ B (número de revisões) ===")
-    # Spearman with reviews_count
     rows = []
     for x in NUM_METRICS:
         s = df[[x, "reviews_count"]].dropna()
@@ -160,11 +161,40 @@ def median_summary(df: pd.DataFrame):
     _write("\n=== Median summary of all PRs (not grouped by repository) ===")
     _write(_median_summary(df).to_string(index=False))
 
+# --------- Relatório narrativo Markdown (para entrega) ---------
+
+def generate_markdown_report(df: pd.DataFrame, path=os.path.join(DATA_DIR, "report_lab03.md")):
+    med = df[NUM_METRICS + ["reviews_count"]].median().to_frame("median")
+    # Correlações principais (Spearman)
+    s_status = df[NUM_METRICS + ["final_status_bin"]].corr(method="spearman")["final_status_bin"].drop("final_status_bin")
+    s_reviews = df[NUM_METRICS + ["reviews_count"]].corr(method="spearman")["reviews_count"].drop("reviews_count")
+
+    lines = []
+    lines.append("# LAB-03 – Relatório Final\n")
+    lines.append("## 1. Introdução e hipóteses\n")
+    lines.append("- Hipótese A: PRs maiores e mais longos tendem a **reduzir** a chance de *merge*.\n- Hipótese B: PRs com mais interações tendem a **ter mais revisões**.\n")
+    lines.append("## 2. Metodologia\n")
+    lines.append("- 200 repositórios mais populares (≥100 PRs MERGED+CLOSED)\n- PRs MERGED/CLOSED, ≥1 review, duração ≥1h\n- Métricas: tamanho (arquivos/adições/remoções), tempo, descrição, interações (participantes, comentários de *issue*, *review threads*)\n- Testes: Spearman (e Point-biserial/PEARSON para status), regressão logística; viz: box/violin, heatmaps, scatter.\n")
+    lines.append("## 3. Resultados\n### 3.1 Medianas (todos os PRs)\n")
+    lines.append(med.to_markdown())
+    lines.append("\n### 3.2 Correlações (Spearman) com *status* (MERGED=1)\n")
+    lines.append(s_status.sort_values(ascending=False).to_frame("rho").to_markdown())
+    lines.append("\n### 3.3 Correlações (Spearman) com `reviews_count`\n")
+    lines.append(s_reviews.sort_values(ascending=False).to_frame("rho").to_markdown())
+    lines.append("\n## 4. Discussão\n")
+    lines.append("- Compare sinais/força com as hipóteses; discuta trade-offs de PRs grandes versus chances de *merge* e necessidade de revisões.\n- Limitações: amostragem enviesada por popularidade, linguagens diversas, *rate limits*, automações/bots, efeitos de processo por projeto.\n")
+    lines.append("## 5. Conclusões\n")
+    lines.append("- Principais associações encontradas e implicações práticas para submissão de PRs.\n")
+
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
+
 def run_all(dataset_path: str = None):
     if os.path.exists(REPORT_PATH):
         os.remove(REPORT_PATH)
     df = _load_dataset(dataset_path)
-    # Optionally remove extreme outliers to stabilize viz
+    # Remover picos (apenas para estabilizar as figuras)
     for col in NUM_METRICS + ["reviews_count"]:
         if col in df.columns:
             q_hi = df[col].quantile(0.99)
@@ -173,4 +203,5 @@ def run_all(dataset_path: str = None):
     median_summary(df)
     rq_status_correlations(df)
     rq_reviews_correlations(df)
-    _write("\n[done] Charts saved in charts/ and report at data/metrics_report.txt")
+    generate_markdown_report(df)
+    _write("\n[done] Charts em charts/, métricas em data/metrics_report.txt e relatório em data/report_lab03.md")

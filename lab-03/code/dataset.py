@@ -1,9 +1,10 @@
 import os
-import pandas as pd
-from typing import List, Dict, Any
-from gh_api import fetch_top_repositories, fetch_pull_requests
+from typing import Any, Dict, List
 
-# Output directories
+import pandas as pd
+from gh_api import fetch_pull_requests, fetch_top_repositories
+
+# Pastas de saída
 DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data"))
 RAW_DIR = os.path.join(DATA_DIR, "raw")
 PROC_DIR = os.path.join(DATA_DIR, "processed")
@@ -21,7 +22,7 @@ def build_repos_list(n: int = 200, min_prs: int = 100, save_csv: bool = True) ->
     return df
 
 def build_prs_dataset(repos_df: pd.DataFrame, max_prs_per_repo: int = 500, save_intermediate: bool = True) -> pd.DataFrame:
-    rows: List[Dict[str, Any]] = []
+    rows: List[pd.DataFrame] = []
     for _, r in repos_df.iterrows():
         repo = r["nameWithOwner"]
         prs = fetch_pull_requests(repo, max_prs_per_repo=max_prs_per_repo)
@@ -29,31 +30,40 @@ def build_prs_dataset(repos_df: pd.DataFrame, max_prs_per_repo: int = 500, save_
         if pr_df.empty:
             continue
 
-        # Derived fields
+        # Campos derivados
         pr_df["repo"] = repo
         pr_df["endTime"] = pr_df["mergedAt"].fillna(pr_df["closedAt"])
         pr_df["createdAt"] = pd.to_datetime(pr_df["createdAt"], utc=True)
         pr_df["endTime"] = pd.to_datetime(pr_df["endTime"], utc=True)
         pr_df = pr_df[~pr_df["endTime"].isna()]
 
-        # Filters from the PDF:
-        # 1) MERGED or CLOSED -> already ensured by the query
-        # 2) At least one review
+        # Filtros do enunciado
+        # (1) MERGED ou CLOSED -> já vem da query
+        # (2) Pelo menos 1 review
         pr_df = pr_df[pr_df["reviews"].apply(lambda x: (x or {}).get("totalCount", 0)) >= 1]
-        # 3) Duration >= 1 hour
+        # (3) Duração >= 1 hora
         pr_df["analysis_hours"] = (pr_df["endTime"] - pr_df["createdAt"]).dt.total_seconds() / 3600.0
         pr_df = pr_df[pr_df["analysis_hours"] >= 1.0]
 
-        # Metrics (see PDF): size, time, description, interactions
+        # Métricas
         pr_df["size_files"] = pr_df["changedFiles"].fillna(0).astype(int)
         pr_df["size_additions"] = pr_df["additions"].fillna(0).astype(int)
         pr_df["size_deletions"] = pr_df["deletions"].fillna(0).astype(int)
         pr_df["desc_len_chars"] = pr_df["body"].fillna("").astype(str).str.len()
-        pr_df["interactions_participants"] = pr_df["participants"].apply(lambda x: (x or {}).get("totalCount", 0)).astype(int)
-        pr_df["interactions_comments"] = (
-            pr_df["comments"].apply(lambda x: (x or {}).get("totalCount", 0)).astype(int)
-            + pr_df["reviewThreads"].apply(lambda x: (x or {}).get("totalCount", 0)).astype(int)
-        )
+
+        pr_df["interactions_participants"] = pr_df["participants"].apply(
+            lambda x: (x or {}).get("totalCount", 0)
+        ).astype(int)
+
+        # Separar contagens de comentários conforme interpretação mais fiel ao enunciado
+        pr_df["interactions_comments_issue"] = pr_df["comments"].apply(
+            lambda x: (x or {}).get("totalCount", 0)
+        ).astype(int)
+        pr_df["interactions_review_threads"] = pr_df["reviewThreads"].apply(
+            lambda x: (x or {}).get("totalCount", 0)
+        ).astype(int)
+        pr_df["interactions_comments"] = pr_df["interactions_comments_issue"] + pr_df["interactions_review_threads"]
+
         pr_df["reviews_count"] = pr_df["reviews"].apply(lambda x: (x or {}).get("totalCount", 0)).astype(int)
 
         pr_df["final_status"] = pr_df.apply(lambda row: "MERGED" if bool(row.get("merged")) else "CLOSED", axis=1)
@@ -62,8 +72,8 @@ def build_prs_dataset(repos_df: pd.DataFrame, max_prs_per_repo: int = 500, save_
         keep_cols = [
             "repo","number","final_status","final_status_bin","analysis_hours",
             "size_files","size_additions","size_deletions","desc_len_chars",
-            "interactions_participants","interactions_comments","reviews_count",
-            "createdAt","endTime","state","merged"
+            "interactions_participants","interactions_comments_issue","interactions_review_threads",
+            "interactions_comments","reviews_count","createdAt","endTime","state","merged"
         ]
         pr_df = pr_df[keep_cols]
 
@@ -77,7 +87,7 @@ def build_prs_dataset(repos_df: pd.DataFrame, max_prs_per_repo: int = 500, save_
         return pd.DataFrame()
 
     full = pd.concat(rows, ignore_index=True)
-    # Save processed dataset
+    # Salva dataset processado
     full.to_csv(os.path.join(PROC_DIR, "dataset_prs.csv"), index=False)
     try:
         full.to_parquet(os.path.join(PROC_DIR, "dataset_prs.parquet"))

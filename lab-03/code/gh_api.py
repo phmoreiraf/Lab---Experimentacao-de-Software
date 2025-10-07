@@ -1,7 +1,8 @@
 import os
 import time
+from typing import Any, Dict, List
+
 import requests
-from typing import Dict, Any, List
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -27,7 +28,7 @@ def _post_graphql(query: str, variables: Dict[str, Any]) -> Dict[str, Any]:
     raise RuntimeError(f"GraphQL request failed after retries. Last status={resp.status_code}, body={resp.text[:300]}")
 
 def fetch_top_repositories(total: int = 200, min_closed_or_merged_prs: int = 100) -> List[Dict[str, Any]]:
-    """Return top repos sorted by stars that also have >= min_closed_or_merged_prs PRs (MERGED + CLOSED)."""
+    """Top repos por estrelas, filtrando os que têm >= min_closed_or_merged_prs PRs MERGED+CLOSED."""
     query = """
     query searchRepos($pageSize: Int!, $after: String) {
       search(query: "sort:stars", type: REPOSITORY, first: $pageSize, after: $after) {
@@ -57,11 +58,11 @@ def fetch_top_repositories(total: int = 200, min_closed_or_merged_prs: int = 100
         if not search["pageInfo"]["hasNextPage"]:
             break
         after = search["pageInfo"]["endCursor"]
-        time.sleep(1)  # be polite with API
+        time.sleep(1)  # educado com a API
     return results[:total]
 
 def fetch_pull_requests(name_with_owner: str, max_prs_per_repo: int = 500) -> List[Dict[str, Any]]:
-    """Fetch MERGED or CLOSED PRs with at least one review, including metrics needed for the lab."""
+    """PRs MERGED/CLOSED, com campos necessários para métricas/arquivos/contagens/reviews."""
     owner, name = name_with_owner.split("/")
     query = """
     query prs($owner: String!, $name: String!, $pageSize: Int!, $after: String) {
