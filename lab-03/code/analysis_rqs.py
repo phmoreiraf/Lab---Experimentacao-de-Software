@@ -4,18 +4,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
-import statsmodels.api as sm
 
+# ---------------- Paths ----------------
 DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data"))
 PROC_DIR = os.path.join(DATA_DIR, "processed")
 CHARTS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "charts"))
-REPORT_PATH = os.path.join(DATA_DIR, "metrics_report.txt")
+REPORT_PATH = os.path.join(DATA_DIR, "metrics_report.md")
 
 NUM_METRICS = [
     "size_files","size_additions","size_deletions",
     "analysis_hours","desc_len_chars",
     "interactions_participants","interactions_comments"
 ]
+
+# ---------------- Utility functions ----------------
 
 def _load_dataset(path: str = None) -> pd.DataFrame:
     if path is None:
@@ -25,152 +27,187 @@ def _load_dataset(path: str = None) -> pd.DataFrame:
 
 def _ensure_dirs():
     os.makedirs(CHARTS_DIR, exist_ok=True)
-    for sub in ["hist","box","violin","scatter","corr","bar"]:
+    for sub in ["hist","box","violin","scatter","corr", "bar"]:
+        if sub in ["box","violin"]:
+            for sub2 in ["status","reviews"]:
+                os.makedirs(os.path.join(CHARTS_DIR, sub, sub2), exist_ok=True)
         os.makedirs(os.path.join(CHARTS_DIR, sub), exist_ok=True)
 
-def _write(msg: str):
+def _write(msg: str, header=False):
+    """Escreve mensagens no relatório Markdown"""
     with open(REPORT_PATH, "a", encoding="utf-8") as f:
-        f.write(msg + "\n")
+        if header:
+            f.write(f"\n## {msg}\n")
+        else:
+            f.write(msg + "\n")
     print(msg)
 
-def _spearman_series(df: pd.DataFrame, y: str) -> pd.DataFrame:
-    rows = []
-    for x in NUM_METRICS:
-        s = df[[x, y]].dropna()
-        if len(s) < 5: 
-            rows.append({"metric": x, "rho": np.nan, "p": np.nan})
-            continue
-        rho, p = stats.spearmanr(s[x], s[y])
-        rows.append({"metric": x, "rho": rho, "p": p})
-    return pd.DataFrame(rows).sort_values("rho", ascending=False)
+def _clean_outliers(df: pd.DataFrame, lower_q=0.02, upper_q=0.98) -> pd.DataFrame:
+    """Remove outliers com base em quantis (menos agressivo que o IQR)"""
+    for col in NUM_METRICS + ["reviews_count"]:
+        if col in df.columns:
+            q_low = df[col].quantile(lower_q)
+            q_hi = df[col].quantile(upper_q)
+            df = df[(df[col] >= q_low) & (df[col] <= q_hi)]
+    return df
 
-def _pearson_series(df: pd.DataFrame, y: str) -> pd.DataFrame:
+def _spearman_series(df: pd.DataFrame, y: str) -> pd.DataFrame:
+    """Correlação de Spearman entre cada métrica e a variável y"""
     rows = []
     for x in NUM_METRICS:
         s = df[[x, y]].dropna()
         if len(s) < 5:
-            rows.append({"metric": x, "r": np.nan, "p": np.nan})
             continue
-        r, p = stats.pearsonr(s[x], s[y])
-        rows.append({"metric": x, "r": r, "p": p})
-    return pd.DataFrame(rows).sort_values("r", ascending=False)
-
-def _logit(df: pd.DataFrame, y: str, X_cols):
-    s = df[X_cols + [y]].dropna()
-    if s.empty: 
-        return None
-    X = sm.add_constant(s[X_cols])
-    yv = s[y]
-    try:
-        model = sm.Logit(yv, X).fit(disp=False, maxiter=200)
-    except Exception:
-        return None
-    return model
-
-def _median_summary(df: pd.DataFrame) -> pd.DataFrame:
-    med = df[NUM_METRICS + ["reviews_count"]].median().to_frame(name="median").T
-    return med
+        rho, p = stats.spearmanr(s[x], s[y])
+        rows.append({
+            "metric": x,
+            "rho": rho,
+            "p": p,
+            "significant": "YES" if p < 0.05 else "NO"
+        })
+    return pd.DataFrame(rows).sort_values("rho", ascending=False)
 
 def charts_basic(df: pd.DataFrame):
+    """Gera gráficos exploratórios básicos"""
     _ensure_dirs()
+
     # Histograms
     for m in NUM_METRICS + ["reviews_count"]:
         plt.figure(figsize=(7,4))
         plt.hist(df[m].dropna(), bins=40)
         plt.title(f"Histogram - {m}")
-        plt.xlabel(m); plt.ylabel("Freq")
+        plt.xlabel(m); plt.ylabel("Frequency")
         plt.tight_layout()
-        plt.savefig(os.path.join(CHARTS_DIR, "hist", f"hist_{m}.png")); plt.close()
+        plt.savefig(os.path.join(CHARTS_DIR, "hist", f"hist_{m}.png"))
+        plt.close()
 
-    # Correlation heatmaps
-    corr_pearson = df[NUM_METRICS + ["reviews_count","final_status_bin"]].corr(method="pearson")
+    # Heatmap de correlações
     corr_spear = df[NUM_METRICS + ["reviews_count","final_status_bin"]].corr(method="spearman")
-
-    plt.figure(figsize=(8,7))
-    sns.heatmap(corr_pearson, annot=True, fmt=".2f", cmap="coolwarm")
-    plt.title("Pearson Correlations")
-    plt.tight_layout()
-    plt.savefig(os.path.join(CHARTS_DIR, "corr", "heatmap_pearson.png")); plt.close()
-
     plt.figure(figsize=(8,7))
     sns.heatmap(corr_spear, annot=True, fmt=".2f", cmap="coolwarm")
     plt.title("Spearman Correlations")
     plt.tight_layout()
-    plt.savefig(os.path.join(CHARTS_DIR, "corr", "heatmap_spearman.png")); plt.close()
+    plt.savefig(os.path.join(CHARTS_DIR, "corr", "heatmap_spearman.png"))
+    plt.close()
 
-    # Box/violin by final status
+    # Boxplots por status
     for m in NUM_METRICS:
         plt.figure(figsize=(6,4))
-        sns.boxplot(x="final_status", y=m, data=df, showfliers=False)
+        sns.boxplot(x="final_status_bin", y=m, data=df, showfliers=False)
+        plt.title(f"{m} by PR status")
         plt.tight_layout()
-        plt.savefig(os.path.join(CHARTS_DIR, "box", f"box_{m}_by_status.png")); plt.close()
+        plt.savefig(os.path.join(CHARTS_DIR, "box", "status", f"box_{m}_by_status.png"))
+        plt.close()
 
+        sns.violinplot(x="final_status_bin", y=m, data=df, cut=0, inner="quartile") 
+        plt.tight_layout()
+        plt.savefig(os.path.join(CHARTS_DIR, "violin", "status", f"violin_{m}_by_status.png")) 
+        plt.close()
+
+    # Boxplots por revisões
+    for m in NUM_METRICS:
         plt.figure(figsize=(6,4))
-        sns.violinplot(x="final_status", y=m, data=df, cut=0, inner="quartile")
+        sns.boxplot(x="reviews_count", y=m, data=df, showfliers=False)
+        plt.title(f"{m} by PR status")
         plt.tight_layout()
-        plt.savefig(os.path.join(CHARTS_DIR, "violin", f"violin_{m}_by_status.png")); plt.close()
+        plt.savefig(os.path.join(CHARTS_DIR, "box", "reviews", f"box_{m}_by_reviews.png"))
+        plt.close()
 
-    # Scatter vs #reviews
+        sns.violinplot(x="reviews_count", y=m, data=df, cut=0, inner="quartile") 
+        plt.tight_layout() 
+        plt.savefig(os.path.join(CHARTS_DIR, "violin", "reviews", f"violin_{m}_by_reviews.png")) 
+        plt.close()
+
+    # Scatter com número de revisões
     for m in NUM_METRICS:
         plt.figure(figsize=(6,4))
         plt.scatter(df[m], df["reviews_count"], alpha=0.5)
         plt.xlabel(m); plt.ylabel("reviews_count")
         plt.title(f"{m} vs reviews_count")
         plt.tight_layout()
-        plt.savefig(os.path.join(CHARTS_DIR, "scatter", f"scatter_{m}_vs_reviews.png")); plt.close()
+        plt.savefig(os.path.join(CHARTS_DIR, "scatter", f"scatter_{m}_vs_reviews.png"))
+        plt.close()
 
-# ---------------- RQs ----------------
+    # Barras médias por status
+    for m in NUM_METRICS:
+        plt.figure(figsize=(6,4))
+        mean = df.groupby("final_status_bin")[m].mean().reset_index()
+        sns.barplot(x="final_status_bin", y=m, data=mean, palette="viridis")
+        plt.title(f"Mean {m} by PR status")
+        plt.tight_layout()
+        plt.savefig(os.path.join(CHARTS_DIR, "bar", f"bar_mean_{m}_by_status.png"))
+        plt.close()
 
-def rq_status_correlations(df: pd.DataFrame):
-    _write("=== RQ A (feedback final / status MERGED vs CLOSED) ===")
-    # Spearman with binary final_status_bin
+    
+
+
+# ---------------- Análises ----------------
+
+def rq_status_analysis(df: pd.DataFrame):
+    """Análise das RQs 1–4: relação das métricas com o status final (MERGED vs CLOSED)"""
+    _write("Análise RQ A – Feedback final das revisões", header=True)
+
+    # Correlações (Spearman)
     s = _spearman_series(df, "final_status_bin")
-    _write("\nSpearman (rho, p) with final_status_bin=1 for MERGED:")
-    _write(s.to_string(index=False))
+    _write("\n### Correlação de Spearman com 'final_status_bin' (MERGED=1):")
+    _write(s.to_markdown(index=False))
 
-    # Also point-biserial (equivalent to Pearson with binary y)
-    p = _pearson_series(df, "final_status_bin")
-    _write("\nPoint-biserial (Pearson) with final_status_bin:")
-    _write(p.to_string(index=False))
-
-    # Logistic regression as robustness
-    model = _logit(df, "final_status_bin", NUM_METRICS)
-    if model:
-        _write("\nLogistic regression (status_bin ~ metrics) summary:")
-        _write(str(model.summary()))
-    else:
-        _write("\n[!] Logistic regression didn't converge or no data.")
-
-def rq_reviews_correlations(df: pd.DataFrame):
-    _write("\n=== RQ B (número de revisões) ===")
-    # Spearman with reviews_count
+    # Teste de Mann–Whitney
+    _write("\n### Teste de Mann–Whitney (diferença entre MERGED e CLOSED):")
     rows = []
-    for x in NUM_METRICS:
-        s = df[[x, "reviews_count"]].dropna()
-        if len(s) < 5:
-            rows.append({"metric": x, "rho": np.nan, "p": np.nan})
+    for m in NUM_METRICS:
+        merged = df[df.final_status == "MERGED"][m].dropna()
+        closed = df[df.final_status == "CLOSED"][m].dropna()
+        if len(merged) < 5 or len(closed) < 5:
             continue
-        rho, p = stats.spearmanr(s[x], s["reviews_count"])
-        rows.append({"metric": x, "rho": rho, "p": p})
-    res = pd.DataFrame(rows).sort_values("rho", ascending=False)
-    _write("\nSpearman (rho, p) with reviews_count:")
-    _write(res.to_string(index=False))
+        stat, p = stats.mannwhitneyu(merged, closed, alternative="two-sided")
+        rows.append({
+            "metric": m, 
+            "U": stat,
+            "p": p,
+            "significant": "YES" if p < 0.05 else "NO"
+        })
+    _write(pd.DataFrame(rows).to_markdown(index=False))
+
+def rq_reviews_analysis(df: pd.DataFrame):
+    """Análise das RQs 5–8: relação das métricas com o número de revisões"""
+    _write("Análise RQ B – Número de revisões realizadas", header=True)
+    s = _spearman_series(df, "reviews_count")
+    _write("\n### Correlação de Spearman com 'reviews_count':")
+    _write(s.to_markdown(index=False))
 
 def median_summary(df: pd.DataFrame):
-    _write("\n=== Median summary of all PRs (not grouped by repository) ===")
-    _write(_median_summary(df).to_string(index=False))
+    """Resumo de medias das métricas"""
+    _write("Resumo das medias das Métricas", header=True)
+    desc = df[NUM_METRICS + ["reviews_count"]].describe().T
+    desc = desc.rename(
+        columns={
+            "count": "N",
+            "mean": "Média",
+            "std": "Desvio Padrão",
+            "min": "Mínimo",
+            "25%": "Q1",
+            "50%": "Mediana",
+            "75%": "Q3",
+            "max": "Máximo"
+        }
+    )
+
+    desc.index.name = "Métrica"
+    desc.reset_index(inplace=True)
+    _write(desc.to_markdown(index=False))
+
+# ---------------- Runner ----------------
 
 def run_all(dataset_path: str = None):
     if os.path.exists(REPORT_PATH):
         os.remove(REPORT_PATH)
     df = _load_dataset(dataset_path)
-    # Optionally remove extreme outliers to stabilize viz
-    for col in NUM_METRICS + ["reviews_count"]:
-        if col in df.columns:
-            q_hi = df[col].quantile(0.99)
-            df = df[df[col] <= q_hi]
+    print(f"[i] Dataset carregado com {len(df)} PRs.")
+    df = _clean_outliers(df)
+    print(f"[i] Dataset após remoção de outliers: {len(df)} PRs.")
     charts_basic(df)
     median_summary(df)
-    rq_status_correlations(df)
-    rq_reviews_correlations(df)
-    _write("\n[done] Charts saved in charts/ and report at data/metrics_report.txt")
+    rq_status_analysis(df)
+    rq_reviews_analysis(df)
+    _write("\n---\nAnálise concluída. Resultados salvos em 'data/metrics_report.md' e gráficos em 'charts/'.")
