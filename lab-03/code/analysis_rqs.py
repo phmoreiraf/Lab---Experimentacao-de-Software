@@ -1,7 +1,8 @@
 import os
-import pandas as pd
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import seaborn as sns
 from scipy import stats
 
@@ -14,7 +15,8 @@ REPORT_PATH = os.path.join(DATA_DIR, "metrics_report.md")
 NUM_METRICS = [
     "size_files","size_additions","size_deletions",
     "analysis_hours","desc_len_chars",
-    "interactions_participants","interactions_comments"
+    "interactions_participants","interactions_comments_issue",
+    "interactions_review_threads","interactions_comments"
 ]
 
 # ---------------- Utility functions ----------------
@@ -208,6 +210,35 @@ def median_summary(df: pd.DataFrame):
     _write(desc.to_markdown(index=False))
 
 # ---------------- Runner ----------------
+
+# --------- Relatório narrativo Markdown (para entrega) ---------
+
+def generate_markdown_report(df: pd.DataFrame, path=os.path.join(DATA_DIR, "report_lab03.md")):
+    med = df[NUM_METRICS + ["reviews_count"]].median().to_frame("median")
+    # Correlações principais (Spearman)
+    s_status = df[NUM_METRICS + ["final_status_bin"]].corr(method="spearman")["final_status_bin"].drop("final_status_bin")
+    s_reviews = df[NUM_METRICS + ["reviews_count"]].corr(method="spearman")["reviews_count"].drop("reviews_count")
+
+    lines = []
+    lines.append("# LAB-03 – Relatório Final\n")
+    lines.append("## 1. Introdução e hipóteses\n")
+    lines.append("- Hipótese A: PRs maiores e mais longos tendem a **reduzir** a chance de *merge*.\n- Hipótese B: PRs com mais interações tendem a **ter mais revisões**.\n")
+    lines.append("## 2. Metodologia\n")
+    lines.append("- 200 repositórios mais populares (≥100 PRs MERGED+CLOSED)\n- PRs MERGED/CLOSED, ≥1 review, duração ≥1h\n- Métricas: tamanho (arquivos/adições/remoções), tempo, descrição, interações (participantes, comentários de *issue*, *review threads*)\n- Testes: Spearman (e Point-biserial/PEARSON para status), regressão logística; viz: box/violin, heatmaps, scatter.\n")
+    lines.append("## 3. Resultados\n### 3.1 Medianas (todos os PRs)\n")
+    lines.append(med.to_markdown())
+    lines.append("\n### 3.2 Correlações (Spearman) com *status* (MERGED=1)\n")
+    lines.append(s_status.sort_values(ascending=False).to_frame("rho").to_markdown())
+    lines.append("\n### 3.3 Correlações (Spearman) com `reviews_count`\n")
+    lines.append(s_reviews.sort_values(ascending=False).to_frame("rho").to_markdown())
+    lines.append("\n## 4. Discussão\n")
+    lines.append("- Compare sinais/força com as hipóteses; discuta trade-offs de PRs grandes versus chances de *merge* e necessidade de revisões.\n- Limitações: amostragem enviesada por popularidade, linguagens diversas, *rate limits*, automações/bots, efeitos de processo por projeto.\n")
+    lines.append("## 5. Conclusões\n")
+    lines.append("- Principais associações encontradas e implicações práticas para submissão de PRs.\n")
+
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
 
 def run_all(dataset_path: str = None):
     if os.path.exists(REPORT_PATH):

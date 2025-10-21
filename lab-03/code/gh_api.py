@@ -1,7 +1,8 @@
 import os
 import time
+from typing import Any, Dict, List
+
 import requests
-from typing import Dict, Any, List
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -66,7 +67,7 @@ def fetch_top_repositories(total: int = 200, min_closed_or_merged_prs: int = 100
 
 
 def fetch_pull_requests(name_with_owner: str, max_prs_per_repo: int = 500) -> List[Dict[str, Any]]:
-    """Fetch MERGED or CLOSED PRs with at least one review, including metrics needed for the lab."""
+    """PRs MERGED/CLOSED, com campos necessários para métricas/arquivos/contagens/reviews."""
     owner, name = name_with_owner.split("/")
     query = """
     query prs($owner: String!, $name: String!, $pageSize: Int!, $after: String) {

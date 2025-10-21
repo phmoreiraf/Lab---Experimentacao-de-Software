@@ -1,6 +1,10 @@
-import argparse, os, pandas as pd
-from dataset import build_repos_list, build_prs_dataset, RAW_DIR, PROC_DIR
+import argparse
+import os
+
+import pandas as pd
 from analysis_rqs import run_all
+from dataset import PROC_DIR, RAW_DIR, build_prs_dataset, build_repos_list
+
 
 def print_main_menu():
     print("\nBem-vindo ao buscador de PRs do GitHub!")

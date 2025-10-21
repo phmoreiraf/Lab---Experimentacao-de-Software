@@ -1,9 +1,10 @@
 import os
-import pandas as pd
-from typing import List, Dict, Any
-from gh_api import fetch_top_repositories, fetch_pull_requests
+from typing import Any, Dict, List
 
-# Output directories
+import pandas as pd
+from gh_api import fetch_pull_requests, fetch_top_repositories
+
+# Pastas de saída
 DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data"))
 RAW_DIR = os.path.join(DATA_DIR, "raw")
 PROC_DIR = os.path.join(DATA_DIR, "processed")
@@ -84,7 +85,7 @@ def build_prs_dataset(repos_df: pd.DataFrame, max_prs_per_repo: int = 500, save_
         return pd.DataFrame()
 
     full = pd.concat(rows, ignore_index=True)
-    # Save processed dataset
+    # Salva dataset processado
     full.to_csv(os.path.join(PROC_DIR, "dataset_prs.csv"), index=False)
     
     return full
