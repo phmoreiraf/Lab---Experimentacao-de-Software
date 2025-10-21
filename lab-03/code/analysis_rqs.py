@@ -15,8 +15,7 @@ REPORT_PATH = os.path.join(DATA_DIR, "metrics_report.md")
 NUM_METRICS = [
     "size_files","size_additions","size_deletions",
     "analysis_hours","desc_len_chars",
-    "interactions_participants","interactions_comments_issue",
-    "interactions_review_threads","interactions_comments"
+    "interactions_participants","interactions_comments"
 ]
 
 # ---------------- Utility functions ----------------
@@ -247,6 +246,8 @@ def run_all(dataset_path: str = None):
     print(f"[i] Dataset carregado com {len(df)} PRs.")
     df = _clean_outliers(df)
     print(f"[i] Dataset após remoção de outliers: {len(df)} PRs.")
+    print(f"Numero de prs closed: {len(df[df.final_status=='CLOSED'])}")
+    print(f"Numero de prs merged: {len(df[df.final_status=='MERGED'])}")
     charts_basic(df)
     median_summary(df)
     rq_status_analysis(df)
