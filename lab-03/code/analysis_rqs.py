@@ -28,7 +28,7 @@ def _load_dataset(path: str = None) -> pd.DataFrame:
 def _ensure_dirs():
     os.makedirs(CHARTS_DIR, exist_ok=True)
     for sub in ["hist","box","violin","scatter","corr", "bar"]:
-        if sub in ["box","violin"]:
+        if sub in ["box","violin", "bar"]:
             for sub2 in ["status","reviews"]:
                 os.makedirs(os.path.join(CHARTS_DIR, sub, sub2), exist_ok=True)
         os.makedirs(os.path.join(CHARTS_DIR, sub), exist_ok=True)
@@ -135,7 +135,17 @@ def charts_basic(df: pd.DataFrame):
         sns.barplot(x="final_status_bin", y=m, data=mean, palette="viridis")
         plt.title(f"Mean {m} by PR status")
         plt.tight_layout()
-        plt.savefig(os.path.join(CHARTS_DIR, "bar", f"bar_mean_{m}_by_status.png"))
+        plt.savefig(os.path.join(CHARTS_DIR, "bar", "status", f"bar_mean_{m}_by_status.png"))
+        plt.close()
+
+    # Barras por revisões
+    for m in NUM_METRICS:
+        plt.figure(figsize=(6,4))
+        mean = df.groupby("reviews_count")[m].mean().reset_index()
+        sns.barplot(x="reviews_count", y=m, data=mean, palette="viridis")
+        plt.title(f"Mean {m} by reviews_count")
+        plt.tight_layout()
+        plt.savefig(os.path.join(CHARTS_DIR, "bar", "reviews", f"bar_mean_{m}_by_reviews.png"))
         plt.close()
 
     
