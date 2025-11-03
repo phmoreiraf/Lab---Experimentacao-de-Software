@@ -15,3 +15,6 @@
 [Trabalho 2](/lab-02/README.md) - Segundo Laboratório de Experimentação de Software
 
 [Trabalho 3](/lab-03/README.md) - Terceiro Laboratório de Experimentação de Software
+
+[Trabalho 4](/lab-04/README.md) - Quarto Laboratório de Experimentação de Software
+
