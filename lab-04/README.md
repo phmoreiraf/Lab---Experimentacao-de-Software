@@ -44,51 +44,56 @@ A metodologia foi estruturada em quatro etapas principais - coleta, pré-process
 
 **3.1 Etapa 1 - Coleta de Dados Públicos (OpenAQ API)**
 
-A base de dados utilizada é proveniente da API pública OpenAQ v2, que fornece medições de qualidade do ar em formato JSON, coletadas por redes de monitoramento de diferentes países.
-No contexto brasileiro, foram selecionadas as 27 capitais estaduais (lista armazenada em gh_api.py), e os parâmetros PM2.5 e PM10 foram definidos como variáveis principais.
+Os dados foram obtidos diretamente da API pública v3 do OpenAQ — um repositório global de medições atmosféricas.
+A coleta foi realizada por meio de chamadas HTTP aos endpoints:
 
-O script realiza chamadas automáticas à API, respeitando limites de requisição e coletando os seguintes campos:
+- Lista de estações no Brasil
 
-- city, uf, parameter, value, unit;
-- date.utc, date.local;
-- coordinates.latitude, coordinates.longitude;
-- location (nome da estação).
+    https://api.openaq.org/v3/locations?countries_id=45
 
-Esses registros são salvos em CSV bruto (data/raw/openaq_brazil_capitals.csv), servindo como insumo para as etapas seguintes.
+
+Esse endpoint retorna todas as estações de monitoramento ativas no país, incluindo seus sensores, coordenadas e provedores de dados.
+
+- Medições diárias de cada sensor
+
+    https://api.openaq.org/v3/sensors/{sensor_id}/measurements/daily
+
+
+Permite extrair as médias diárias de concentração dos poluentes monitorados, com parâmetros de data (datetime_from e datetime_to).
+
+A partir dessa base, o estudo considerou apenas as estações localizadas nas capitais brasileiras, definidas manualmente segundo o IBGE.
 
 **3.2 Etapa 2 - Processamento e Limpeza**
 
-O processamento ocorre no módulo dataset.py, que realiza:
+O processo de coleta foi implementado em Python, utilizando a biblioteca requests para comunicação com a API e pandas para manipulação e análise dos dados.
 
-- Conversão de data/hora para o formato local;
-- Remoção de valores ausentes, duplicados ou negativos;
-- Criação de novas colunas de data (year, month, day, dow, hour);
-- Agregação diária por cidade e parâmetro, com cálculo das estatísticas:
-    - Média diária (mean_value);
-    - Valor máximo diário (max_value);
-    - Número de medições (n_measurements).
+O pipeline segue as seguintes etapas:
 
-Os resultados são exportados para data/processed/daily_city_parameter.csv, e uma tabela auxiliar dim_city.csv armazena latitude e longitude médias por cidade.
-Essas duas tabelas são fundamentais para a extração das métricas do GQM, especialmente para Q1 e Q2.
+1. Listagem das estações brasileiras (/locations?countries_id=45);
+2. Filtragem das estações pertencentes às capitais brasileiras com base no campo locality ou name;
+3. Iteração sobre os sensores disponíveis, selecionando apenas os parâmetros de interesse (PM2.5 e PM10);
+4. Coleta das medições diárias de cada sensor nos últimos N dias;
+5. Consolidação em um único DataFrame, contendo:
 
-**3.3 Etapa 3 - Consolidação de Métricas (GQM)**
+    - Nome da cidade
+    - Latitude e longitude
+    - Parâmetro medido (PM2.5 ou PM10)
+    - Valor médio diário
+    - Unidade de medida
+    - Data local e UTC
 
-Para atender às questões definidas no GQM, o pipeline será expandido para:
+Esses dados são armazenados localmente em CSV (data/raw/openaq_capitais_brasil.csv), servindo como base para análises e visualizações posteriores.
 
-1. **Métricas espaciais (Q1):**
-Cálculo de médias e desvios padrão por cidade e parâmetro.
+**3.3 Etapa 3 - Métricas e Transformações**
 
-2. **Métricas temporais (Q2):**
-Agregações por mês, dia da semana e hora.
+Após a coleta, o código processará os dados para:
 
-3. **Métricas de excedência (Q3):**
-Percentual de dias acima dos limites definidos.
+- Calcular médias diárias, mensais e anuais por capital e por poluente;
+- Identificar capitais com maior média anual de PM2.5 e PM10;
+- Gerar gráficos temporais e mapas de calor geográficos;
+- Calcular correlações entre latitude/longitude e níveis de poluição.
 
-Essas métricas serão gravadas em novas tabelas auxiliares, como:
-
-- agg_monthly_trends.csv - médias mensais por cidade e parâmetro;
-- agg_hourly_patterns.csv - médias horárias para análise de sazonalidade diária;
-- agg_exceedance.csv - percentuais de dias acima dos limites OMS.
+As métricas serão visualizadas em um dashboard interativo no estilo business intelligence, permitindo a análise comparativa e temporal das capitais.
 
 **3.4 Etapa 4 - Modelagem para BI e Visualização**
 
