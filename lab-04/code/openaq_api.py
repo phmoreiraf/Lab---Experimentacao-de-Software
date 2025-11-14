@@ -4,6 +4,7 @@ import pandas as pd
 import time
 import dotenv
 import os
+import sys
 
 # -----------------------------------------------
 # CONFIGURAÇÕES
@@ -75,9 +76,9 @@ def fetch_locations_for_city(city):
         print(f"Erro em {city['name']}: {e}")
         return []
 
-def fetch_sensor_yearly(sensor_id, date_from=None, date_to=None):
-    url = f"{BASE_URL}/sensors/{sensor_id}/days/yearly"
-    params = {"date_from": date_from, "date_to": date_to}
+def fetch_sensor_data(sensor_id, date_from=None, date_to=None, yearly=True):
+    url = f"{BASE_URL}/sensors/{sensor_id}/days/yearly" if yearly else f"{BASE_URL}/sensors/{sensor_id}/days/monthly"
+    params = {"date_from": date_from, "date_to": date_to, "limit": 500}
     headers = {"X-API-Key": API_KEY}
     try:
         resp = requests.get(url, headers=headers, params=params if date_from and date_to else None, timeout=30)
@@ -86,6 +87,7 @@ def fetch_sensor_yearly(sensor_id, date_from=None, date_to=None):
     except Exception as e:
         print(f"Erro no sensor {sensor_id}: {e}")
         return []
+
 # -----------------------------------------------
 # COLETA DE DADOS
 # -----------------------------------------------
@@ -123,21 +125,21 @@ def get_sensors_from_locations(locations):
         time.sleep(WAIT)
     return pd.DataFrame(records)
 
-def get_sensor_yearly_data(df_sensors):
+def get_sensor_data(df_sensors: pd.DataFrame = None, yearly=True):
     records = []
-    if df_sensors.empty:
+    if df_sensors is None or df_sensors.empty:
         df_sensors = pd.read_csv(os.path.join(DIR_SENSORS_DATA, "openaq_brazil_sensors.csv"))
 
     for _, row in df_sensors.iterrows():
         sid = row["sensor_id"]
         city = row["city"]
-        print(f"Coletando dados anuais do sensor {sid} ({city})...")
+        print(f"Coletando dados {'anuais' if yearly else 'mensais'} do sensor {sid} ({city})...")
 
-        yearly_data = fetch_sensor_yearly(sid)
-        if not yearly_data:
+        sensors_data = fetch_sensor_data(sid, yearly=yearly)
+        if not sensors_data:
             continue
 
-        for year in yearly_data:
+        for year in sensors_data:
             param_data = year.get("parameter", {})
             period = year.get("period", {})
             summary = year.get("summary", {})
@@ -160,13 +162,7 @@ def get_sensor_yearly_data(df_sensors):
                 "expectedCount": coverage.get("expectedCount"),
             })
         time.sleep(WAIT)
-
-    df_yearly = pd.DataFrame(records)
-    path = os.path.join(DIR_SENSORS_DATA, "openaq_brazil_yearly.csv")
-    df_yearly.to_csv(path, index=False, encoding="utf-8-sig")
-    print(f"\n Dados anuais salvos em: {path}")
-    return df_yearly
-
+    return pd.DataFrame(records)
 
 # --------------------------------------------------
 # SALVA RESULTADOS
@@ -181,11 +177,13 @@ def get_openaq_brazil_sensors():
     save_to_csv(records, os.path.join(DIR_SENSORS_DATA, "openaq_brazil_sensors.csv"), "Dados de sensores do OpenAQ no Brasil")
     return records
 
-def get_openaq_brazil_yearly_data(df_sensors=None):
-    df_yearly = get_sensor_yearly_data(df_sensors)
-    save_to_csv(df_yearly, os.path.join(DIR_SENSORS_DATA, "openaq_brazil_yearly.csv"), "Dados anuais do OpenAQ no Brasil")
-    return df_yearly
+def get_openaq_brazil_sensors_data(df_sensors=None, yearly=True):
+    df_sensors_data = get_sensor_data(df_sensors, yearly=yearly)
+    file_type = "yearly" if yearly else "monthly"
+    save_to_csv(df_sensors_data, os.path.join(DIR_SENSORS_DATA, f"openaq_brazil_{file_type}.csv"), f"Dados {file_type} do OpenAQ no Brasil")
+    return df_sensors_data
 
 if __name__ == "__main__":
+    yearly = sys.argv[1].lower() == "true" if len(sys.argv) > 1 else True
     df_sensors = get_openaq_brazil_sensors()
-    get_openaq_brazil_yearly_data(df_sensors)
+    get_openaq_brazil_sensors_data(df_sensors, yearly=yearly)
