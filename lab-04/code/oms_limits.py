@@ -7,7 +7,7 @@ def create_oms_limits_files():
     # Daily (24h or equivalent short-term) guideline values
     daily_data = {
         "pollutant": ["pm25", "pm10", "no2", "o3", "so2", "co"],
-        "value": [15, 45, 25, 100, 40, 3.49],  # units: µg/m³ except CO = ppm
+        "limit": [15, 45, 25, 100, 40, 3.49],  # units: µg/m³ except CO = ppm
         "units": ["µg/m³", "µg/m³", "µg/m³", "µg/m³", "µg/m³", "ppm"],
     }
 
@@ -18,7 +18,7 @@ def create_oms_limits_files():
     # Annual guideline values
     annual_data = {
         "pollutant": ["pm25", "pm10", "no2"],
-        "value": [5, 15, 10],  # units: µg/m³
+        "limit": [5, 15, 10],  # units: µg/m³
         "units": ["µg/m³", "µg/m³", "µg/m³"],
     }
 
