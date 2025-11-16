@@ -1,0 +1,50 @@
+﻿city,parameter_name,months_total,months_exceed,percent_exceedance
+Belém,pm25,5,0,0.0
+Campinas,co,32,0,0.0
+Campinas,no2,24,1,4.166666666666666
+Campinas,o3,33,0,0.0
+Campinas,pm10,33,0,0.0
+Campinas,pm25,30,16,53.333333333333336
+Duque de Caxias,co,30,1,3.3333333333333335
+Duque de Caxias,no2,30,27,90.0
+Duque de Caxias,o3,28,0,0.0
+Duque de Caxias,pm10,31,2,6.451612903225806
+Duque de Caxias,pm25,27,5,18.51851851851852
+Duque de Caxias,so2,10,0,0.0
+Guarulhos,no2,5,5,100.0
+Guarulhos,o3,33,0,0.0
+Guarulhos,pm10,33,4,12.121212121212121
+Guarulhos,pm25,33,17,51.515151515151516
+Manaus,pm25,4,0,0.0
+Osasco,co,33,0,0.0
+Osasco,no2,33,32,96.96969696969697
+Osasco,o3,33,0,0.0
+Osasco,pm10,33,5,15.151515151515152
+Osasco,pm25,33,15,45.45454545454545
+Osasco,so2,33,0,0.0
+Ribeirão Preto,co,31,0,0.0
+Ribeirão Preto,no2,32,1,3.125
+Ribeirão Preto,o3,30,0,0.0
+Ribeirão Preto,pm10,32,9,28.125
+Ribeirão Preto,pm25,32,14,43.75
+Rio de Janeiro,co,27,0,0.0
+Rio de Janeiro,no2,30,26,86.66666666666667
+Rio de Janeiro,o3,31,0,0.0
+Rio de Janeiro,pm10,31,4,12.903225806451612
+Rio de Janeiro,pm25,4,0,0.0
+Santo André,o3,26,0,0.0
+Sorocaba,no2,33,4,12.121212121212121
+Sorocaba,o3,33,0,0.0
+Sorocaba,pm10,33,2,6.0606060606060606
+São Bernardo do Campo,co,31,0,0.0
+São Bernardo do Campo,no2,33,16,48.484848484848484
+São Bernardo do Campo,o3,33,0,0.0
+São Bernardo do Campo,pm10,33,2,6.0606060606060606
+São Bernardo do Campo,pm25,31,11,35.483870967741936
+São Bernardo do Campo,so2,33,0,0.0
+São Paulo,co,33,0,0.0
+São Paulo,no2,33,32,96.96969696969697
+São Paulo,o3,33,0,0.0
+São Paulo,pm10,33,2,6.0606060606060606
+São Paulo,pm25,56,21,37.5
+São Paulo,so2,33,0,0.0
