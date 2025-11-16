@@ -175,7 +175,9 @@ periodo_por_cidade = (
 )
 
 # Converter percentCoverage → anos equivalentes de coleta
-periodo_por_cidade["anos_equivalentes"] = periodo_por_cidade["percent_coverage_medio"] / 100
+periodo_por_cidade["anos_equivalentes"] = (periodo_por_cidade["percent_coverage_medio"]/100) * (
+    (pd.to_datetime(periodo_por_cidade["data_fim"]) - pd.to_datetime(periodo_por_cidade["data_inicio"])).dt.days / 365.25
+)
 
 # Unir tudo
 info_cidades = sensores_por_cidade.merge(periodo_por_cidade, on="city", how="left")
