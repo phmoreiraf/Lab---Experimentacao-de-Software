@@ -12,9 +12,12 @@ if not os.path.exists(OUTPUT_DIR):
     os.makedirs(OUTPUT_DIR)
 
 monthly_file = os.path.join(DATA_DIR, "raw", "openaq_brazil_monthly.csv")
+yearly_file = os.path.join(DATA_DIR, "raw", "openaq_brazil_yearly.csv")
 oms_limits_file = os.path.join(DATA_DIR, "oms", "oms_daily_limits.csv")
 if not os.path.exists(monthly_file):
     raise FileNotFoundError(f"Arquivo não encontrado: {monthly_file}")
+if not os.path.exists(yearly_file):
+    raise FileNotFoundError(f"Arquivo não encontrado: {yearly_file}")
 if not os.path.exists(oms_limits_file):
     raise FileNotFoundError(f"Arquivo não encontrado: {oms_limits_file}")
 
@@ -144,3 +147,40 @@ df_city_pollutant_ranking = df_city_pollutant_ranking.sort_values(
 
 df_city_pollutant_ranking.to_csv(os.path.join(OUTPUT_DIR, "ranking_cidades_por_poluente.csv"), index=False, encoding="utf-8-sig")
 print("Arquivo salvo: ranking_cidades_por_poluente.csv")
+
+
+# ==========================================================
+# 8. GERAR CSV COM INFORMAÇÕES POR CIDADE
+# ==========================================================
+df_yearly = pd.read_csv(yearly_file)
+
+
+# Total de sensores por cidade
+sensores_por_cidade = (
+    df_yearly.groupby("city")["sensor_id"]
+             .nunique()
+             .reset_index()
+             .rename(columns={"sensor_id": "total_sensores"})
+)
+
+# Período de coleta por cidade
+periodo_por_cidade = (
+    df_yearly.groupby("city")
+        .agg(
+            data_inicio=("datetimeFrom_utc", "min"),
+            data_fim=("datetimeTo_utc", "max"),
+            percent_coverage_medio=("percentCoverage", "mean")
+        )
+        .reset_index()
+)
+
+# Converter percentCoverage → anos equivalentes de coleta
+periodo_por_cidade["anos_equivalentes"] = periodo_por_cidade["percent_coverage_medio"] / 100
+
+# Unir tudo
+info_cidades = sensores_por_cidade.merge(periodo_por_cidade, on="city", how="left")
+
+# Salvar CSV
+info_cidades.to_csv(os.path.join(OUTPUT_DIR, "info_sensores_por_cidade.csv"), index=False, encoding="utf-8-sig")
+
+print("Arquivo salvo: info_sensores_por_cidade.csv")
