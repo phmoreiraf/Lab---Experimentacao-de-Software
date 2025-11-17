@@ -1,4 +1,4 @@
-﻿city,sensor_id,parameter_name,units,value,avg,min,max,median,datetimeFrom_utc,datetimeTo_utc,percentCoverage,observedCount,expectedCount
+﻿city,sensor_id,pollutant_name,units,value,avg,min,max,median,datetimeFrom_utc,datetimeTo_utc,percentCoverage,observedCount,expectedCount
 São Paulo,13546,no2,µg/m³,40.9,40.93344512096671,9.227272987365723,100.0,39.16136360168457,2017-01-01T02:00:00Z,2018-01-01T02:00:00Z,24.0,86,365
 São Paulo,13547,o3,µg/m³,36.7,36.74586794230827,0.3333333432674408,96.09091186523438,35.86956596374512,2017-01-01T02:00:00Z,2018-01-01T02:00:00Z,24.0,86,365
 São Paulo,13547,o3,µg/m³,55.4,55.40093794028485,0.0,428.0,52.260868072509766,2021-01-01T03:00:00Z,2022-01-01T03:00:00Z,88.0,323,365

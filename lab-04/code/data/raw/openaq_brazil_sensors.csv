@@ -1,4 +1,4 @@
-﻿city,location_id,location_name,locality,country_name,sensor_id,sensor_name,parameter_id,parameter_name,parameter_displayName,parameter_units,latitude,longitude,datetimeFirst_utc,datetimeLast_utc
+﻿city,location_id,location_name,locality,country_name,sensor_id,sensor_name,pollutant_id,pollutant_name,pollutant_displayName,pollutant_units,latitude,longitude,datetimeFirst_utc,datetimeLast_utc
 São Paulo,5233,Cid.Universitária-USP-Ipen,São Paulo,Brazil,13546,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-23.56634178,-46.73741428,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
 São Paulo,5233,Cid.Universitária-USP-Ipen,São Paulo,Brazil,13547,o3 µg/m³,3,o3,O₃ mass,µg/m³,-23.56634178,-46.73741428,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
 São Paulo,5233,Cid.Universitária-USP-Ipen,São Paulo,Brazil,13548,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-23.56634178,-46.73741428,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
