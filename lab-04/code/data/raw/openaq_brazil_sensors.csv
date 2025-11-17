@@ -1,0 +1,160 @@
+﻿city,location_id,location_name,locality,country_name,sensor_id,sensor_name,parameter_id,parameter_name,parameter_displayName,parameter_units,latitude,longitude,datetimeFirst_utc,datetimeLast_utc
+São Paulo,5233,Cid.Universitária-USP-Ipen,São Paulo,Brazil,13546,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-23.56634178,-46.73741428,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5233,Cid.Universitária-USP-Ipen,São Paulo,Brazil,13547,o3 µg/m³,3,o3,O₃ mass,µg/m³,-23.56634178,-46.73741428,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5233,Cid.Universitária-USP-Ipen,São Paulo,Brazil,13548,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-23.56634178,-46.73741428,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5243,Pinheiros,São Paulo,Brazil,13735,co ppm,8,co,CO,ppm,-23.56145989,-46.70201651,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5243,Pinheiros,São Paulo,Brazil,13736,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-23.56145989,-46.70201651,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5243,Pinheiros,São Paulo,Brazil,13737,o3 µg/m³,3,o3,O₃ mass,µg/m³,-23.56145989,-46.70201651,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5243,Pinheiros,São Paulo,Brazil,13570,pm10 µg/m³,1,pm10,PM10,µg/m³,-23.56145989,-46.70201651,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5243,Pinheiros,São Paulo,Brazil,13738,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-23.56145989,-46.70201651,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5252,Congonhas,São Paulo,Brazil,13607,co ppm,8,co,CO,ppm,-23.61632008,-46.66346553,2017-08-10T23:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5252,Congonhas,São Paulo,Brazil,13609,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-23.61632008,-46.66346553,2017-08-10T23:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5252,Congonhas,São Paulo,Brazil,13653,pm10 µg/m³,1,pm10,PM10,µg/m³,-23.61632008,-46.66346553,2017-08-10T23:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5252,Congonhas,São Paulo,Brazil,13654,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-23.61632008,-46.66346553,2017-08-10T23:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5252,Congonhas,São Paulo,Brazil,13608,so2 µg/m³,6,so2,SO₂ mass,µg/m³,-23.61632008,-46.66346553,2017-08-10T23:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5270,Cerqueira César,Cerqueira César,Brazil,13649,co ppm,8,co,CO,ppm,-23.55354256,-46.67270477,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5270,Cerqueira César,Cerqueira César,Brazil,13650,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-23.55354256,-46.67270477,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5270,Cerqueira César,Cerqueira César,Brazil,13651,pm10 µg/m³,1,pm10,PM10,µg/m³,-23.55354256,-46.67270477,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5270,Cerqueira César,Cerqueira César,Brazil,13652,so2 µg/m³,6,so2,SO₂ mass,µg/m³,-23.55354256,-46.67270477,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5277,Ibirapuera,São Paulo,Brazil,13682,co ppm,8,co,CO,ppm,-23.59184199,-46.6606875,2017-07-01T00:00:00Z,2023-02-16T00:00:00Z
+São Paulo,5277,Ibirapuera,São Paulo,Brazil,13683,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-23.59184199,-46.6606875,2017-07-01T00:00:00Z,2023-02-16T00:00:00Z
+São Paulo,5277,Ibirapuera,São Paulo,Brazil,13684,o3 µg/m³,3,o3,O₃ mass,µg/m³,-23.59184199,-46.6606875,2017-07-01T00:00:00Z,2023-02-16T00:00:00Z
+São Paulo,5277,Ibirapuera,São Paulo,Brazil,13685,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-23.59184199,-46.6606875,2017-07-01T00:00:00Z,2023-02-16T00:00:00Z
+São Paulo,5282,Parque D.Pedro II,São Paulo,Brazil,13730,co ppm,8,co,CO,ppm,-23.54484566,-46.62767559,2017-08-10T22:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5282,Parque D.Pedro II,São Paulo,Brazil,13731,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-23.54484566,-46.62767559,2017-08-10T22:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5282,Parque D.Pedro II,São Paulo,Brazil,13728,o3 µg/m³,3,o3,O₃ mass,µg/m³,-23.54484566,-46.62767559,2017-08-10T22:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5282,Parque D.Pedro II,São Paulo,Brazil,13729,pm10 µg/m³,1,pm10,PM10,µg/m³,-23.54484566,-46.62767559,2017-08-10T22:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5282,Parque D.Pedro II,São Paulo,Brazil,13701,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-23.54484566,-46.62767559,2017-08-10T22:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5284,Marg.Tietê-Pte Remédios,São Paulo,Brazil,5079362,co ppm,8,co,CO,ppm,-23.51870583,-46.74332004,2022-10-03T20:00:00Z,2022-10-04T19:00:00Z
+São Paulo,5284,Marg.Tietê-Pte Remédios,São Paulo,Brazil,5079360,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-23.51870583,-46.74332004,2022-10-03T20:00:00Z,2022-10-04T19:00:00Z
+São Paulo,5284,Marg.Tietê-Pte Remédios,São Paulo,Brazil,5079359,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-23.51870583,-46.74332004,2022-10-03T20:00:00Z,2022-10-04T19:00:00Z
+São Paulo,5284,Marg.Tietê-Pte Remédios,São Paulo,Brazil,5079361,so2 µg/m³,6,so2,SO₂ mass,µg/m³,-23.51870583,-46.74332004,2022-10-03T20:00:00Z,2022-10-04T19:00:00Z
+São Paulo,5288,Mooca,São Paulo,Brazil,13720,co ppm,8,co,CO,ppm,-23.54973405,-46.60041665,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5288,Mooca,São Paulo,Brazil,13721,o3 µg/m³,3,o3,O₃ mass,µg/m³,-23.54973405,-46.60041665,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5288,Mooca,São Paulo,Brazil,13722,pm10 µg/m³,1,pm10,PM10,µg/m³,-23.54973405,-46.60041665,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5288,Mooca,São Paulo,Brazil,391213,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-23.54973405,-46.60041665,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5289,N.Senhora do Ó,São Paulo,Brazil,13723,o3 µg/m³,3,o3,O₃ mass,µg/m³,-23.48009871,-46.69205192,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5289,N.Senhora do Ó,São Paulo,Brazil,13724,pm10 µg/m³,1,pm10,PM10,µg/m³,-23.48009871,-46.69205192,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5299,Santana,São Paulo,Brazil,13774,o3 µg/m³,3,o3,O₃ mass,µg/m³,-23.50599272,-46.6289603,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5299,Santana,São Paulo,Brazil,13769,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-23.50599272,-46.6289603,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5304,São Caetano do Sul,São Caetano do Sul,Brazil,13785,co ppm,8,co,CO,ppm,-23.61844277,-46.55635394,2017-07-01T15:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5304,São Caetano do Sul,São Caetano do Sul,Brazil,13786,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-23.61844277,-46.55635394,2017-07-01T15:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5304,São Caetano do Sul,São Caetano do Sul,Brazil,13787,o3 µg/m³,3,o3,O₃ mass,µg/m³,-23.61844277,-46.55635394,2017-07-01T15:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5304,São Caetano do Sul,São Caetano do Sul,Brazil,13788,pm10 µg/m³,1,pm10,PM10,µg/m³,-23.61844277,-46.55635394,2017-07-01T15:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5304,São Caetano do Sul,São Caetano do Sul,Brazil,391216,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-23.61844277,-46.55635394,2017-07-01T15:00:00Z,2023-04-05T20:00:00Z
+São Paulo,5304,São Caetano do Sul,São Caetano do Sul,Brazil,13789,so2 µg/m³,6,so2,SO₂ mass,µg/m³,-23.61844277,-46.55635394,2017-07-01T15:00:00Z,2023-04-05T20:00:00Z
+São Paulo,589967,Sao Paulo,N/A,Brazil,3271948,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-23.629158,-46.696558,2023-02-14T02:00:00Z,2025-03-04T12:00:00Z
+Rio de Janeiro,820323,Centro,Rio de Janeiro,Brazil,4475452,co ppm,8,co,CO,ppm,-22.9084,-43.1795,2023-04-06T16:00:00Z,2025-10-21T12:00:00Z
+Rio de Janeiro,820323,Centro,Rio de Janeiro,Brazil,4475460,o3 µg/m³,3,o3,O₃ mass,µg/m³,-22.9084,-43.1795,2023-04-06T16:00:00Z,2025-10-21T12:00:00Z
+Rio de Janeiro,820323,Centro,Rio de Janeiro,Brazil,6344694,pm10 µg/m³,1,pm10,PM10,µg/m³,-22.9084,-43.1795,2023-04-06T16:00:00Z,2025-10-21T12:00:00Z
+Rio de Janeiro,820324,Copacabana,Rio de Janeiro,Brazil,4475465,o3 µg/m³,3,o3,O₃ mass,µg/m³,-22.9649,-43.1807,2023-04-06T16:00:00Z,2025-10-21T12:00:00Z
+Rio de Janeiro,820324,Copacabana,Rio de Janeiro,Brazil,4475471,pm10 µg/m³,1,pm10,PM10,µg/m³,-22.9649,-43.1807,2023-04-06T16:00:00Z,2025-10-21T12:00:00Z
+Rio de Janeiro,820328,São Cristóvão,Rio de Janeiro,Brazil,4475463,o3 µg/m³,3,o3,O₃ mass,µg/m³,-22.8961,-43.2212,2023-04-06T16:00:00Z,2024-12-09T11:00:00Z
+Rio de Janeiro,820328,São Cristóvão,Rio de Janeiro,Brazil,4475456,pm10 µg/m³,1,pm10,PM10,µg/m³,-22.8961,-43.2212,2023-04-06T16:00:00Z,2024-12-09T11:00:00Z
+Rio de Janeiro,820329,Tijuca,Rio de Janeiro,Brazil,4475446,no µg/m³,19843,no,NO mass,µg/m³,-22.9244,-43.2326,2023-04-06T16:00:00Z,2025-10-21T12:00:00Z
+Rio de Janeiro,820329,Tijuca,Rio de Janeiro,Brazil,4475448,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-22.9244,-43.2326,2023-04-06T16:00:00Z,2025-10-21T12:00:00Z
+Rio de Janeiro,820329,Tijuca,Rio de Janeiro,Brazil,4475458,nox µg/m³,27,nox,NOx mass,µg/m³,-22.9244,-43.2326,2023-04-06T16:00:00Z,2025-10-21T12:00:00Z
+Rio de Janeiro,820329,Tijuca,Rio de Janeiro,Brazil,4475447,o3 µg/m³,3,o3,O₃ mass,µg/m³,-22.9244,-43.2326,2023-04-06T16:00:00Z,2025-10-21T12:00:00Z
+Rio de Janeiro,820329,Tijuca,Rio de Janeiro,Brazil,4475445,pm10 µg/m³,1,pm10,PM10,µg/m³,-22.9244,-43.2326,2023-04-06T16:00:00Z,2025-10-21T12:00:00Z
+Rio de Janeiro,5110474,Presidente Vargas,Rio de Janeiro,Brazil,13626664,pm10 µg/m³,1,pm10,PM10,µg/m³,-22.9035,-43.1879,2025-07-17T18:00:00Z,2025-10-21T12:00:00Z
+Rio de Janeiro,5110474,Presidente Vargas,Rio de Janeiro,Brazil,13626662,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-22.9035,-43.1879,2025-07-17T18:00:00Z,2025-10-21T12:00:00Z
+Rio de Janeiro,5110511,Campo de Santana,Rio de Janeiro,Brazil,13626934,pm10 µg/m³,1,pm10,PM10,µg/m³,-22.9081,-43.1865,2025-07-17T18:00:00Z,2025-10-21T12:00:00Z
+Rio de Janeiro,5110511,Campo de Santana,Rio de Janeiro,Brazil,13626932,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-22.9081,-43.1865,2025-07-17T18:00:00Z,2025-10-21T12:00:00Z
+Rio de Janeiro,5636852,MAM,Rio de Janeiro,Brazil,14012772,pm10 µg/m³,1,pm10,PM10,µg/m³,-22.913,-43.1702,2025-09-01T15:00:00Z,2025-10-21T12:00:00Z
+Rio de Janeiro,5636852,MAM,Rio de Janeiro,Brazil,14021533,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-22.913,-43.1702,2025-09-01T15:00:00Z,2025-10-21T12:00:00Z
+Rio de Janeiro,5636888,Praça XV,Rio de Janeiro,Brazil,14013034,pm10 µg/m³,1,pm10,PM10,µg/m³,-22.9014,-43.173,2025-09-01T16:00:00Z,2025-10-21T12:00:00Z
+Rio de Janeiro,5636888,Praça XV,Rio de Janeiro,Brazil,14013033,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-22.9014,-43.173,2025-09-01T16:00:00Z,2025-10-21T12:00:00Z
+Fortaleza,269134,211004_teste_modo_fixo,,Brazil,1554344,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-3.723489338,-38.476446569,,
+Manaus,5040030,Manaus,,Brazil,13574642,pm1 µg/m³,19,pm1,PM1,µg/m³,-3.1209190075022586,-60.021405806179125,2025-07-11T19:00:00Z,2025-11-13T19:00:00Z
+Manaus,5040030,Manaus,,Brazil,13574643,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-3.1209190075022586,-60.021405806179125,2025-07-11T19:00:00Z,2025-11-13T19:00:00Z
+Manaus,5040030,Manaus,,Brazil,13574644,relativehumidity %,98,relativehumidity,RH,%,-3.1209190075022586,-60.021405806179125,2025-07-11T19:00:00Z,2025-11-13T19:00:00Z
+Manaus,5040030,Manaus,,Brazil,13574645,temperature c,100,temperature,Temperature (C),c,-3.1209190075022586,-60.021405806179125,2025-07-11T19:00:00Z,2025-11-13T19:00:00Z
+Manaus,5040030,Manaus,,Brazil,13574646,um003 particles/cm³,125,um003,PM0.3 count,particles/cm³,-3.1209190075022586,-60.021405806179125,2025-07-11T19:00:00Z,2025-11-13T19:00:00Z
+Belém,3852932,GUAMÁ,,Brazil,12597358,pm1 µg/m³,19,pm1,PM1,µg/m³,-1.471781,-48.462378,2025-03-26T23:00:00Z,2025-07-19T16:00:00Z
+Belém,3852932,GUAMÁ,,Brazil,12597359,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-1.471781,-48.462378,2025-03-26T23:00:00Z,2025-07-19T16:00:00Z
+Belém,3852932,GUAMÁ,,Brazil,12597360,relativehumidity %,98,relativehumidity,RH,%,-1.471781,-48.462378,2025-03-26T23:00:00Z,2025-07-19T16:00:00Z
+Belém,3852932,GUAMÁ,,Brazil,12597361,temperature c,100,temperature,Temperature (C),c,-1.471781,-48.462378,2025-03-26T23:00:00Z,2025-07-19T16:00:00Z
+Belém,3852932,GUAMÁ,,Brazil,12597362,um003 particles/cm³,125,um003,PM0.3 count,particles/cm³,-1.471781,-48.462378,2025-03-26T23:00:00Z,2025-07-19T16:00:00Z
+Guarulhos,5275,Guarulhos-Paço Municipal,Guarulhos,Brazil,13673,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-23.45553426,-46.5185334,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Guarulhos,5275,Guarulhos-Paço Municipal,Guarulhos,Brazil,13674,o3 µg/m³,3,o3,O₃ mass,µg/m³,-23.45553426,-46.5185334,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Guarulhos,5275,Guarulhos-Paço Municipal,Guarulhos,Brazil,13675,pm10 µg/m³,1,pm10,PM10,µg/m³,-23.45553426,-46.5185334,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Guarulhos,5275,Guarulhos-Paço Municipal,Guarulhos,Brazil,13676,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-23.45553426,-46.5185334,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Campinas,5257,Campinas-V.União,Campinas,Brazil,13633,co ppm,8,co,CO,ppm,-22.94672842,-47.11928086,2017-08-10T23:00:00Z,2023-04-05T20:00:00Z
+Campinas,5257,Campinas-V.União,Campinas,Brazil,13638,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-22.94672842,-47.11928086,2017-08-10T23:00:00Z,2023-04-05T20:00:00Z
+Campinas,5257,Campinas-V.União,Campinas,Brazil,13616,o3 µg/m³,3,o3,O₃ mass,µg/m³,-22.94672842,-47.11928086,2017-08-10T23:00:00Z,2023-04-05T20:00:00Z
+Campinas,5257,Campinas-V.União,Campinas,Brazil,13639,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-22.94672842,-47.11928086,2017-08-10T23:00:00Z,2023-04-05T20:00:00Z
+Campinas,5265,Campinas-Taquaral,Campinas,Brazil,13636,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-22.87461894,-47.05897276,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Campinas,5265,Campinas-Taquaral,Campinas,Brazil,13637,o3 µg/m³,3,o3,O₃ mass,µg/m³,-22.87461894,-47.05897276,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Campinas,5265,Campinas-Taquaral,Campinas,Brazil,13629,pm10 µg/m³,1,pm10,PM10,µg/m³,-22.87461894,-47.05897276,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Campinas,5267,Campinas-Centro,Campinas,Brazil,13634,co ppm,8,co,CO,ppm,-22.9025248,-47.05721074,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Campinas,5267,Campinas-Centro,Campinas,Brazil,13635,pm10 µg/m³,1,pm10,PM10,µg/m³,-22.9025248,-47.05721074,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Duque de Caxias,820326,Irajá,Rio de Janeiro,Brazil,4475449,co ppm,8,co,CO,ppm,-22.831600000000005,-43.32690000000001,2023-04-06T16:00:00Z,2025-10-21T12:00:00Z
+Duque de Caxias,820326,Irajá,Rio de Janeiro,Brazil,4475462,no µg/m³,19843,no,NO mass,µg/m³,-22.831600000000005,-43.32690000000001,2023-04-06T16:00:00Z,2025-10-21T12:00:00Z
+Duque de Caxias,820326,Irajá,Rio de Janeiro,Brazil,4475455,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-22.831600000000005,-43.32690000000001,2023-04-06T16:00:00Z,2025-10-21T12:00:00Z
+Duque de Caxias,820326,Irajá,Rio de Janeiro,Brazil,4475466,nox µg/m³,27,nox,NOx mass,µg/m³,-22.831600000000005,-43.32690000000001,2023-04-06T16:00:00Z,2025-10-21T12:00:00Z
+Duque de Caxias,820326,Irajá,Rio de Janeiro,Brazil,6459542,o3 µg/m³,3,o3,O₃ mass,µg/m³,-22.831600000000005,-43.32690000000001,2023-04-06T16:00:00Z,2025-10-21T12:00:00Z
+Duque de Caxias,820326,Irajá,Rio de Janeiro,Brazil,4475454,pm10 µg/m³,1,pm10,PM10,µg/m³,-22.831600000000005,-43.32690000000001,2023-04-06T16:00:00Z,2025-10-21T12:00:00Z
+Duque de Caxias,820326,Irajá,Rio de Janeiro,Brazil,6819305,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-22.831600000000005,-43.32690000000001,2023-04-06T16:00:00Z,2025-10-21T12:00:00Z
+Duque de Caxias,820326,Irajá,Rio de Janeiro,Brazil,11268993,so2 µg/m³,6,so2,SO₂ mass,µg/m³,-22.831600000000005,-43.32690000000001,2023-04-06T16:00:00Z,2025-10-21T12:00:00Z
+Duque de Caxias,5110472,Campinho,Rio de Janeiro,Brazil,13626666,pm10 µg/m³,1,pm10,PM10,µg/m³,-22.8834,-43.3546,2025-07-17T18:00:00Z,2025-10-21T12:00:00Z
+Duque de Caxias,5110472,Campinho,Rio de Janeiro,Brazil,13626663,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-22.8834,-43.3546,2025-07-17T18:00:00Z,2025-10-21T12:00:00Z
+Duque de Caxias,5110473,Engenheiro Leal,Rio de Janeiro,Brazil,13626665,pm10 µg/m³,1,pm10,PM10,µg/m³,-22.8769,-43.323,2025-07-17T18:00:00Z,2025-10-21T12:00:00Z
+Duque de Caxias,5110473,Engenheiro Leal,Rio de Janeiro,Brazil,13668682,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-22.8769,-43.323,2025-07-17T18:00:00Z,2025-10-21T12:00:00Z
+Duque de Caxias,5110512,Quintino,Rio de Janeiro,Brazil,13626933,pm10 µg/m³,1,pm10,PM10,µg/m³,-22.8915,-43.3248,2025-07-17T18:00:00Z,2025-10-21T12:00:00Z
+Duque de Caxias,5110512,Quintino,Rio de Janeiro,Brazil,13626931,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-22.8915,-43.3248,2025-07-17T18:00:00Z,2025-10-21T12:00:00Z
+Duque de Caxias,5110513,Cascadura ,Rio de Janeiro,Brazil,13675687,pm10 µg/m³,1,pm10,PM10,µg/m³,-22.8849,-43.3276,2025-07-17T18:00:00Z,2025-10-21T12:00:00Z
+Duque de Caxias,5110513,Cascadura ,Rio de Janeiro,Brazil,13626936,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-22.8849,-43.3276,2025-07-17T18:00:00Z,2025-10-21T12:00:00Z
+Duque de Caxias,5110514,Madureira,Rio de Janeiro,Brazil,13626935,pm10 µg/m³,1,pm10,PM10,µg/m³,-22.8776,-43.3374,2025-07-17T18:00:00Z,2025-10-21T12:00:00Z
+Duque de Caxias,5110514,Madureira,Rio de Janeiro,Brazil,13668937,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-22.8776,-43.3374,2025-07-17T18:00:00Z,2025-10-21T12:00:00Z
+Duque de Caxias,5648811,Parque Madureira,Rio de Janeiro,Brazil,14021288,pm10 µg/m³,1,pm10,PM10,µg/m³,-22.866,-43.3403,2025-09-02T18:00:00Z,2025-10-21T12:00:00Z
+Duque de Caxias,5648811,Parque Madureira,Rio de Janeiro,Brazil,14035548,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-22.866,-43.3403,2025-09-02T18:00:00Z,2025-10-21T12:00:00Z
+São Bernardo do Campo,5012,Diadema,Diadema,Brazil,12743,o3 µg/m³,3,o3,O₃ mass,µg/m³,-23.68587641,-46.61162193,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Bernardo do Campo,5012,Diadema,Diadema,Brazil,12744,pm10 µg/m³,1,pm10,PM10,µg/m³,-23.68587641,-46.61162193,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Bernardo do Campo,5278,Interlagos,São Paulo,Brazil,13686,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-23.68050765,-46.67504316,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Bernardo do Campo,5278,Interlagos,São Paulo,Brazil,13687,o3 µg/m³,3,o3,O₃ mass,µg/m³,-23.68050765,-46.67504316,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Bernardo do Campo,5278,Interlagos,São Paulo,Brazil,13688,pm10 µg/m³,1,pm10,PM10,µg/m³,-23.68050765,-46.67504316,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Bernardo do Campo,5278,Interlagos,São Paulo,Brazil,13689,so2 µg/m³,6,so2,SO₂ mass,µg/m³,-23.68050765,-46.67504316,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Bernardo do Campo,5286,Mauá,Mauá,Brazil,13712,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-23.668549,-46.46600027,2017-07-01T00:00:00Z,2023-04-05T17:00:00Z
+São Bernardo do Campo,5286,Mauá,Mauá,Brazil,13713,o3 µg/m³,3,o3,O₃ mass,µg/m³,-23.668549,-46.46600027,2017-07-01T00:00:00Z,2023-04-05T17:00:00Z
+São Bernardo do Campo,5286,Mauá,Mauá,Brazil,13714,pm10 µg/m³,1,pm10,PM10,µg/m³,-23.668549,-46.46600027,2017-07-01T00:00:00Z,2023-04-05T17:00:00Z
+São Bernardo do Campo,5286,Mauá,Mauá,Brazil,391207,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-23.668549,-46.46600027,2017-07-01T00:00:00Z,2023-04-05T17:00:00Z
+São Bernardo do Campo,5293,S.André-Capuava,Santo André,Brazil,391214,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-23.6398037,-46.49163676999999,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Bernardo do Campo,5293,S.André-Capuava,Santo André,Brazil,13750,o3 µg/m³,3,o3,O₃ mass,µg/m³,-23.6398037,-46.49163676999999,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Bernardo do Campo,5293,S.André-Capuava,Santo André,Brazil,13751,pm10 µg/m³,1,pm10,PM10,µg/m³,-23.6398037,-46.49163676999999,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Bernardo do Campo,5293,S.André-Capuava,Santo André,Brazil,13752,so2 µg/m³,6,so2,SO₂ mass,µg/m³,-23.6398037,-46.49163676999999,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+São Bernardo do Campo,5294,S.André-Paço Municipal,,Brazil,13753,co ppm,8,co,CO,ppm,-23.6569942,-46.53091876,2017-07-01T04:00:00Z,2017-10-27T18:00:00Z
+São Bernardo do Campo,5294,S.André-Paço Municipal,,Brazil,13754,pm10 µg/m³,1,pm10,PM10,µg/m³,-23.6569942,-46.53091876,2017-07-01T04:00:00Z,2017-10-27T18:00:00Z
+São Bernardo do Campo,5295,S.Bernardo-Centro,São Bernardo do Campo,Brazil,13755,co ppm,8,co,CO,ppm,-23.69867109,-46.54623219,2017-08-10T23:00:00Z,2023-04-05T20:00:00Z
+São Bernardo do Campo,5295,S.Bernardo-Centro,São Bernardo do Campo,Brazil,13756,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-23.69867109,-46.54623219,2017-08-10T23:00:00Z,2023-04-05T20:00:00Z
+São Bernardo do Campo,5295,S.Bernardo-Centro,São Bernardo do Campo,Brazil,13757,o3 µg/m³,3,o3,O₃ mass,µg/m³,-23.69867109,-46.54623219,2017-08-10T23:00:00Z,2023-04-05T20:00:00Z
+São Bernardo do Campo,5295,S.Bernardo-Centro,São Bernardo do Campo,Brazil,13758,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-23.69867109,-46.54623219,2017-08-10T23:00:00Z,2023-04-05T20:00:00Z
+São Bernardo do Campo,5296,S.Bernardo-Paulicéia,,Brazil,13759,pm10 µg/m³,1,pm10,PM10,µg/m³,-23.67135396,-46.58466789,2017-07-01T00:00:00Z,2023-04-05T19:00:00Z
+Santo André,5258,Itaquera,São Paulo,Brazil,13617,o3 µg/m³,3,o3,O₃ mass,µg/m³,-23.58001483,-46.46665141,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Osasco,5239,Osasco,Osasco,Brazil,13725,co ppm,8,co,CO,ppm,-23.52672142,-46.79207766,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Osasco,5239,Osasco,Osasco,Brazil,13726,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-23.52672142,-46.79207766,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Osasco,5239,Osasco,Osasco,Brazil,13727,pm10 µg/m³,1,pm10,PM10,µg/m³,-23.52672142,-46.79207766,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Osasco,5239,Osasco,Osasco,Brazil,13560,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-23.52672142,-46.79207766,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Osasco,5239,Osasco,Osasco,Brazil,13623,so2 µg/m³,6,so2,SO₂ mass,µg/m³,-23.52672142,-46.79207766,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Osasco,5262,Taboão da Serra,,Brazil,13624,co ppm,8,co,CO,ppm,-23.60932386,-46.75829437,2017-07-01T00:00:00Z,2023-03-31T10:00:00Z
+Osasco,5262,Taboão da Serra,,Brazil,13794,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-23.60932386,-46.75829437,2017-07-01T00:00:00Z,2023-03-31T10:00:00Z
+Osasco,5262,Taboão da Serra,,Brazil,13795,pm10 µg/m³,1,pm10,PM10,µg/m³,-23.60932386,-46.75829437,2017-07-01T00:00:00Z,2023-03-31T10:00:00Z
+Osasco,5269,Carapicuíba,Carapicuíba,Brazil,13643,co ppm,8,co,CO,ppm,-23.53139503,-46.83577973,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Osasco,5269,Carapicuíba,Carapicuíba,Brazil,13644,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-23.53139503,-46.83577973,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Osasco,5269,Carapicuíba,Carapicuíba,Brazil,13645,o3 µg/m³,3,o3,O₃ mass,µg/m³,-23.53139503,-46.83577973,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Osasco,5269,Carapicuíba,Carapicuíba,Brazil,13646,pm10 µg/m³,1,pm10,PM10,µg/m³,-23.53139503,-46.83577973,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Osasco,5290,Pico do Jaraguá,Pico do Jaraguá,Brazil,13732,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-23.4562689,-46.76609776,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Osasco,5290,Pico do Jaraguá,Pico do Jaraguá,Brazil,13733,o3 µg/m³,3,o3,O₃ mass,µg/m³,-23.4562689,-46.76609776,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Osasco,5290,Pico do Jaraguá,Pico do Jaraguá,Brazil,13734,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-23.4562689,-46.76609776,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Ribeirão Preto,5292,Ribeirão Preto-Centro,,Brazil,13745,co ppm,8,co,CO,ppm,-21.17706594,-47.81898767,2017-07-01T00:00:00Z,2017-10-27T18:00:00Z
+Ribeirão Preto,5292,Ribeirão Preto-Centro,,Brazil,13746,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-21.17706594,-47.81898767,2017-07-01T00:00:00Z,2017-10-27T18:00:00Z
+Ribeirão Preto,5292,Ribeirão Preto-Centro,,Brazil,13747,o3 µg/m³,3,o3,O₃ mass,µg/m³,-21.17706594,-47.81898767,2017-07-01T00:00:00Z,2017-10-27T18:00:00Z
+Ribeirão Preto,5292,Ribeirão Preto-Centro,,Brazil,13748,pm10 µg/m³,1,pm10,PM10,µg/m³,-21.17706594,-47.81898767,2017-07-01T00:00:00Z,2017-10-27T18:00:00Z
+Ribeirão Preto,5292,Ribeirão Preto-Centro,,Brazil,13749,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-21.17706594,-47.81898767,2017-07-01T00:00:00Z,2017-10-27T18:00:00Z
+Ribeirão Preto,61945,Ribeirão Preto,Ribeirão Preto,Brazil,391205,co ppm,8,co,CO,ppm,-21.15394189,-47.82848053,2021-01-13T00:00:00Z,2023-04-05T20:00:00Z
+Ribeirão Preto,61945,Ribeirão Preto,Ribeirão Preto,Brazil,391203,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-21.15394189,-47.82848053,2021-01-13T00:00:00Z,2023-04-05T20:00:00Z
+Ribeirão Preto,61945,Ribeirão Preto,Ribeirão Preto,Brazil,391334,o3 µg/m³,3,o3,O₃ mass,µg/m³,-21.15394189,-47.82848053,2021-01-13T00:00:00Z,2023-04-05T20:00:00Z
+Ribeirão Preto,61945,Ribeirão Preto,Ribeirão Preto,Brazil,391201,pm10 µg/m³,1,pm10,PM10,µg/m³,-21.15394189,-47.82848053,2021-01-13T00:00:00Z,2023-04-05T20:00:00Z
+Ribeirão Preto,61945,Ribeirão Preto,Ribeirão Preto,Brazil,391204,pm25 µg/m³,2,pm25,PM2.5,µg/m³,-21.15394189,-47.82848053,2021-01-13T00:00:00Z,2023-04-05T20:00:00Z
+Sorocaba,5303,Sorocaba,Sorocaba,Brazil,13782,no2 µg/m³,5,no2,NO₂ mass,µg/m³,-23.50242658,-47.47902991,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Sorocaba,5303,Sorocaba,Sorocaba,Brazil,13783,o3 µg/m³,3,o3,O₃ mass,µg/m³,-23.50242658,-47.47902991,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z
+Sorocaba,5303,Sorocaba,Sorocaba,Brazil,13784,pm10 µg/m³,1,pm10,PM10,µg/m³,-23.50242658,-47.47902991,2017-07-01T00:00:00Z,2023-04-05T20:00:00Z

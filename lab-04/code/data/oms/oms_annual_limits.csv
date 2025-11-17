@@ -1,0 +1,4 @@
+﻿pollutant,limit,units
+pm25,5,µg/m³
+pm10,15,µg/m³
+no2,10,µg/m³
