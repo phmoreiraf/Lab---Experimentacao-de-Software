@@ -86,7 +86,7 @@ df_exceed_percent = (
 
 df_exceed_percent["percent_exceedance"] = (
     df_exceed_percent["months_exceed"] / df_exceed_percent["months_total"] * 100
-)
+).round(2)
 
 # =============================
 # 6. SALVAR RESULTADOS
@@ -107,7 +107,7 @@ df_annual_city = (
     df.groupby(["city", "pollutant_name", "year"])["avg"]
       .mean()
       .reset_index()
-      .rename(columns={"avg": "city_year_mean"})
+      .rename(columns={"avg": "city_year_mean"}).round(2)
 )
 
 # Ranking geral por poluente, agregando média das médias anuais
@@ -124,7 +124,7 @@ for pollutant in pollutants:
         .groupby(["city"])["city_year_mean"]
         .mean()
         .reset_index()
-        .sort_values(by="city_year_mean", ascending=False)
+        .sort_values(by="city_year_mean", ascending=False).round(2)
     )
 
     # Salvar o ranking individual
@@ -137,6 +137,7 @@ df_city_pollutant_ranking = (
     df_annual_city_clean.groupby(["city", "pollutant_name"])["city_year_mean"]
                   .mean()
                   .reset_index()
+                  .round(2)
 )
 
 # Ordenar do mais poluído para o menos
@@ -172,12 +173,13 @@ periodo_por_cidade = (
             percent_coverage_medio=("percentCoverage", "mean")
         )
         .reset_index()
+        .round(2)
 )
 
 # Converter percentCoverage → anos equivalentes de coleta
-periodo_por_cidade["anos_equivalentes"] = (periodo_por_cidade["percent_coverage_medio"]/100) * (
+periodo_por_cidade["anos_equivalentes"] = ((periodo_por_cidade["percent_coverage_medio"]/100) * (
     (pd.to_datetime(periodo_por_cidade["data_fim"]) - pd.to_datetime(periodo_por_cidade["data_inicio"])).dt.days / 365.25
-)
+)).round(2)
 
 # Unir tudo
 info_cidades = sensores_por_cidade.merge(periodo_por_cidade, on="city", how="left")
