@@ -33,7 +33,7 @@ if oms.empty:
     exit()
 
 # Remover espaços e normalizar nome dos poluentes
-df["parameter_name"] = df["parameter_name"].str.lower().str.strip()
+df["pollutant_name"] = df["pollutant_name"].str.lower().str.strip()
 oms["pollutant"] = oms["pollutant"].str.lower().str.strip()
 
 # Criar coluna de mês (YYYY-MM)
@@ -45,7 +45,7 @@ df["year_month"] = df["datetimeFrom_utc"].dt.to_period("M")
 # =============================
 
 df_monthly_city = (
-    df.groupby(["city", "parameter_name", "year_month"])["avg"]
+    df.groupby(["city", "pollutant_name", "year_month"])["avg"]
       .mean()
       .reset_index()
       .rename(columns={"avg": "city_month_mean"})
@@ -57,7 +57,7 @@ df_monthly_city = (
 
 df_merged = df_monthly_city.merge(
     oms,
-    left_on="parameter_name",
+    left_on="pollutant_name",
     right_on="pollutant",
     how="left"
 )
@@ -76,7 +76,7 @@ df_merged["exceeds"] = df_merged["city_month_mean"] > df_merged["limit"]
 # =============================
 
 df_exceed_percent = (
-    df_merged.groupby(["city", "parameter_name"])
+    df_merged.groupby(["city", "pollutant_name"])
              .agg(
                  months_total=("exceeds", "count"),
                  months_exceed=("exceeds", "sum")
@@ -104,7 +104,7 @@ df["year"] = df["datetimeFrom_utc"].dt.year
 
 # Média anual por cidade e por poluente
 df_annual_city = (
-    df.groupby(["city", "parameter_name", "year"])["avg"]
+    df.groupby(["city", "pollutant_name", "year"])["avg"]
       .mean()
       .reset_index()
       .rename(columns={"avg": "city_year_mean"})
@@ -112,15 +112,15 @@ df_annual_city = (
 
 # Ranking geral por poluente, agregando média das médias anuais
 # Para cada poluente, gerar um ranking separado
-df_annual_city_clean = df_annual_city.query("parameter_name in ['pm25', 'pm10', 'no2', 'o3', 'so2', 'co']")
-pollutants = df_annual_city_clean["parameter_name"].unique()
+df_annual_city_clean = df_annual_city.query("pollutant_name in ['pm25', 'pm10', 'no2', 'o3', 'so2', 'co']")
+pollutants = df_annual_city_clean["pollutant_name"].unique()
 
 rankings_dir = os.path.join(OUTPUT_DIR, "rankings_por_poluente")
 os.makedirs(rankings_dir, exist_ok=True)
 
 for pollutant in pollutants:
     df_pollutant = (
-        df_annual_city_clean[df_annual_city_clean["parameter_name"] == pollutant]
+        df_annual_city_clean[df_annual_city_clean["pollutant_name"] == pollutant]
         .groupby(["city"])["city_year_mean"]
         .mean()
         .reset_index()
@@ -134,7 +134,7 @@ for pollutant in pollutants:
     print(f"Arquivo salvo: {filename}")
 
 df_city_pollutant_ranking = (
-    df_annual_city_clean.groupby(["city", "parameter_name"])["city_year_mean"]
+    df_annual_city_clean.groupby(["city", "pollutant_name"])["city_year_mean"]
                   .mean()
                   .reset_index()
 )
