@@ -1,114 +1,115 @@
-# Laboratório 4 - Visualização e Análise de Dados Públicos sobre Qualidade do Ar no Brasil
+# Projeto de Análise da Qualidade do Ar no Brasil com Dados da OpenAQ
 
 ## 1. Introdução
 
-A poluição atmosférica é um dos maiores desafios ambientais contemporâneos. Ela impacta diretamente a saúde da população, a sustentabilidade das cidades e a estabilidade climática do planeta. Entre os poluentes mais estudados estão o material particulado fino (PM2.5) e o material particulado inalável (PM10), ambos compostos por pequenas partículas sólidas ou líquidas em suspensão no ar, capazes de penetrar profundamente no sistema respiratório humano.
+A poluição atmosférica é um dos maiores desafios ambientais contemporâneos, afetando diretamente a saúde pública, o bem-estar urbano e a dinâmica climática. Entre os poluentes mais monitorados encontram-se PM2.5, PM10, NO₂, SO₂, CO e O₃, todos associados a doenças respiratórias, cardiovasculares e ao aumento da mortalidade. A Organização Mundial da Saúde (OMS) estabelece limites de exposição para esses poluentes, mas diversos estudos indicam que grandes centros urbanos frequentemente ultrapassam tais recomendações.
 
-Nas últimas décadas, a urbanização acelerada, o aumento do tráfego veicular e as queimadas, especialmente nas regiões Centro-Oeste e Norte do Brasil, agravaram a exposição da população a esses poluentes. A Organização Mundial da Saúde (OMS) estima que milhões de mortes anuais estejam relacionadas à má qualidade do ar, sendo uma das principais causas de doenças respiratórias e cardiovasculares. Diante desse cenário, torna-se urgente investigar, de forma sistemática e aberta, a situação da qualidade do ar nas cidades brasileiras, utilizando dados públicos e ferramentas modernas de análise.
+Este trabalho investiga a qualidade do ar em cidades brasileiras com mais de 500 mil habitantes (definição do IBGE), utilizando exclusivamente dados abertos da plataforma **OpenAQ**, que consolida medições de estações oficiais e institucionais no mundo todo. O objetivo principal é construir uma base analítica e visual (dashboard BI) que permita identificar padrões espaciais, tendências temporais e excedências em relação às diretrizes da OMS.
 
-O presente trabalho tem como objetivo desenvolver uma base analítica e visual (dashboard BI) para avaliar a qualidade do ar nas capitais brasileiras, com base em dados da plataforma OpenAQ, uma iniciativa global de dados abertos que integra medições de centenas de estações monitoras espalhadas pelo mundo.
+O projeto segue o modelo **GQM (Goal–Question–Metric)** para garantir coerência entre coleta, métricas e análise.
 
-A pesquisa adota o modelo GQM (Goal–Question–Metric) para guiar o processo de coleta e análise de dados, garantindo que cada métrica extraída do sistema atenda a uma questão de pesquisa clara e mensurável.
+---
 
-## 2. GQM - Goal, Question, Metric
+## 2. GQM — Goal, Question, Metric
 
-### **Goal (Objetivo Geral)**
+### **Goal (Objetivo Geral)**  
+Investigar padrões espaciais e temporais da qualidade do ar em grandes cidades brasileiras, identificando excedências dos limites da OMS e estruturando esses dados em um dashboard de análise.
 
-Investigar os padrões espaciais e temporais da qualidade do ar nas capitais brasileiras, identificando tendências, possíveis fatores de influência e comparando os níveis observados com os limites recomendados pela OMS.
+### **Questions (Questões de Pesquisa)**
 
-#### **Questions (Questões)**
+1. **RQ1 – Variação Espacial**  
+   Quais cidades apresentam os maiores valores médios de concentração de poluentes atmosféricos?
 
-1. **Q1 - Variação Espacial:**
-Quais capitais apresentam os maiores valores médios de concentração de PM2.5 e PM10 nos últimos 180 dias?
+2. **RQ2 – Padrões Temporais e Sazonais**  
+   Há variações significativas nas concentrações dos poluentes ao longo dos meses e anos disponíveis?
 
-    - Métrica associada: média e desvio-padrão das concentrações diárias por cidade e parâmetro.
-    - Fonte no código: cálculo agregado no processamento diário (dataset.py) e ranking de cidades (analysis_rqs.py).
+3. **RQ3 – Excedência dos Limites da OMS**  
+   Qual o percentual de meses em que os poluentes ultrapassam as diretrizes da OMS em cada cidade?
 
-2. **Q2 - Padrões Temporais e Sazonais:**
-Há variações significativas nas concentrações dos poluentes ao longo dos meses, dias da semana ou períodos do dia?
+### **Metrics (Métricas Associadas)**
 
-    - Métrica associada: séries temporais agregadas por mês, dia da semana e hora local (a ser implementado na coleta).
-    - Fonte no código: criação da dimensão temporal (dim_time.csv) com campos adicionais month_name, dow_name, hour.
+- Média mensal e anual por poluente e por cidade.  
+- Percentual de meses acima do limite da OMS.  
+- Número de sensores disponíveis por cidade.  
+- Período coberto pelas coletas (datetimeFrom, datetimeTo).  
+- PercentCoverage para análise da qualidade e continuidade das séries.
 
-3. **Q3 - Excedência dos Limites da OMS:**
-Qual é o percentual de dias em que os níveis de PM2.5 e PM10 ultrapassam os limites seguros definidos pela OMS (15 µg/m³ e 45 µg/m³, respectivamente)?
-
-    - Métrica associada: contagem de dias acima do limite e taxa percentual de excedência por cidade e parâmetro.
-    - Fonte no código: função de agregação e cálculo de excedência (analysis_rqs.py).
-
-Essas três perguntas estruturam a análise principal, orientando a coleta, o pré-processamento e as visualizações que serão construídas no dashboard de BI.
+---
 
 ## 3. Metodologia e Descrição da Base de Dados
 
-A metodologia foi estruturada em quatro etapas principais - coleta, pré-processamento, consolidação de métricas (GQM) e modelagem para BI, todas automatizadas no código Python, permitindo replicabilidade e atualização contínua dos dados.
+A metodologia foi dividida em quatro etapas principais, todas automatizadas em Python.
 
-**3.1 Etapa 1 - Coleta de Dados Públicos (OpenAQ API)**
+---
 
-Os dados foram obtidos diretamente da API pública v3 do OpenAQ — um repositório global de medições atmosféricas.
-A coleta foi realizada por meio de chamadas HTTP aos endpoints:
+### **3.1 Etapa 1 – Coleta de Dados (OpenAQ API)**
 
-- Lista de estações no Brasil
+A coleta é feita via API pública **OpenAQ v3**, utilizando os seguintes endpoints:
 
-    https://api.openaq.org/v3/locations?countries_id=45
+- **/v3/locations**  
+  Identifica sensores próximos às cidades-alvo utilizando busca geoespacial por raio (12 km em torno do centro urbano).
 
+- **/v3/sensors/{sensor_id}/days/monthly**  
+  Obtém médias mensais de todos os poluentes monitorados pelo sensor.
 
-Esse endpoint retorna todas as estações de monitoramento ativas no país, incluindo seus sensores, coordenadas e provedores de dados.
+- **/v3/sensors/{sensor_id}/days/yearly**  
+  Obtém agregações anuais para análises de tendência.
 
-- Medições diárias de cada sensor
+A API não oferece filtragem direta por nome de cidade, portanto utilizou-se um raio geoespacial aplicado às 35 cidades selecionadas (≥ 500 mil habitantes).
 
-    https://api.openaq.org/v3/sensors/{sensor_id}/measurements/daily
+---
 
+### **3.2 Etapa 2 – Processamento e Limpeza**
 
-Permite extrair as médias diárias de concentração dos poluentes monitorados, com parâmetros de data (datetime_from e datetime_to).
+As etapas principais do pipeline foram:
 
-A partir dessa base, o estudo considerou apenas as estações localizadas nas capitais brasileiras, definidas manualmente segundo o IBGE.
+1. Consulta das cidades e sensores identificados via bounding radius.  
+2. Remoção de duplicatas de sensores compartilhados em áreas metropolitanas.  
+3. Coleta de dados mensais e anuais para todos os sensores.  
+4. Consolidação das informações em arquivos CSV:
 
-**3.2 Etapa 2 - Processamento e Limpeza**
+   - `openaq_brazil_sensors.csv`  
+   - `openaq_brazil_monthly.csv`  
+   - `openaq_brazil_yearly.csv`  
+   - `percentual_excedencia_por_cidade.csv`  
+   - `info_sensores_por_cidade.csv`
 
-O processo de coleta foi implementado em Python, utilizando a biblioteca requests para comunicação com a API e pandas para manipulação e análise dos dados.
+As bibliotecas utilizadas incluem `requests`, `pandas`, `dotenv` e `time`.
 
-O pipeline segue as seguintes etapas:
+---
 
-1. Listagem das estações brasileiras (/locations?countries_id=45);
-2. Filtragem das estações pertencentes às capitais brasileiras com base no campo locality ou name;
-3. Iteração sobre os sensores disponíveis, selecionando apenas os parâmetros de interesse (PM2.5 e PM10);
-4. Coleta das medições diárias de cada sensor nos últimos N dias;
-5. Consolidação em um único DataFrame, contendo:
+### **3.3 Etapa 3 – Cálculo de Métricas (GQM)**
 
-    - Nome da cidade
-    - Latitude e longitude
-    - Parâmetro medido (PM2.5 ou PM10)
-    - Valor médio diário
-    - Unidade de medida
-    - Data local e UTC
+A partir dos CSVs brutos, o script realiza:
 
-Esses dados são armazenados localmente em CSV (data/raw/openaq_capitais_brasil.csv), servindo como base para análises e visualizações posteriores.
+- agregação por cidade e poluente (média mensal e anual);
+- cálculo de excedência comparando valores mensais aos limites da OMS;
+- agrupamento por sensores da mesma cidade;
+- identificação do período de coleta e qualidade das séries;
+- criação de rankings por poluente e por cidade.
 
-**3.3 Etapa 3 - Métricas e Transformações**
+O CSV `percentual_excedencia_por_cidade.csv` sintetiza o RQ3.
 
-Após a coleta, o código processará os dados para:
+---
 
-- Calcular médias diárias, mensais e anuais por capital e por poluente;
-- Identificar capitais com maior média anual de PM2.5 e PM10;
-- Gerar gráficos temporais e mapas de calor geográficos;
-- Calcular correlações entre latitude/longitude e níveis de poluição.
+### **3.4 Etapa 4 – Visualização e Dashboard BI**
 
-As métricas serão visualizadas em um dashboard interativo no estilo business intelligence, permitindo a análise comparativa e temporal das capitais.
+Todos os CSVs são importados para o **Power BI**, onde foram construídas:
 
-**3.4 Etapa 4 - Modelagem para BI e Visualização**
+- páginas de variação espacial (mapas e rankings);
+- páginas de séries temporais mensais e anuais;
+- página dedicada às excedências da OMS;
+- análises complementares (cobertura de sensores, lacunas temporais etc.).
 
-Com as métricas consolidadas, os arquivos são exportados para data/bi/ em formato CSV, compondo uma estrutura de esquema estrela para uso em ferramentas de BI (Power BI, Tableau, Looker Studio).
-As dimensões incluem:
+A visualização final permite responder diretamente às três perguntas de pesquisa.
 
-- dim_city - identificação e coordenadas das capitais;
-- dim_time - granularidade temporal (ano, mês, dia, hora, dia da semana);
-- dim_parameter - descrição dos poluentes.
+---
 
-A tabela fato (fact_air_quality.csv) contém os valores médios diários e será usada como base principal de visualização.
-O dashboard BI será estruturado para representar as três perguntas do GQM em páginas temáticas:
+## 4. Arquivos Gerados
 
-1. Comparativo entre Capitais (Q1);
-2. Tendências Temporais (Q2);
-3. Excedências aos Limites da OMS (Q3).
+- `openaq_brazil_sensors.csv` – Lista de sensores por cidade.  
+- `openaq_brazil_monthly.csv` – Dados mensais agregados por sensor.  
+- `openaq_brazil_yearly.csv` – Dados anuais agregados por sensor.  
+- `percentual_excedencia_por_cidade.csv` – Percentual de excedência dos limites OMS.  
+- `info_sensores_por_cidade.csv` – Resumo de sensores, cobertura e período de coleta por cidade.
 
-Essa abordagem garante coerência entre o modelo conceitual da pesquisa e as visualizações interativas geradas, reforçando a rastreabilidade entre os objetivos, perguntas e métricas adotadas.
